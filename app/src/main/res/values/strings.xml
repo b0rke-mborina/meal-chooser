@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">meal-chooser</string>
+    <string name="app_name">Meal chooser</string>
+
+    <string name="settings">Settings</string>
+    <string name="import_data">Import data</string>
+    <string name="export_data">Export data</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
 </resources>
