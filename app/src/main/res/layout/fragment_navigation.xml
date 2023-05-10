@@ -7,17 +7,26 @@
     android:padding="8dp"
     tools:context=".NavigationFragment">
 
+    <!-- Container for list of nav items
+    <ListView
+        android:id="@+id/list_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" /> -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="3">
 
         <LinearLayout
+            android:id="@+id/ingredients_nav_item"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
+            <!-- android:background="@color/purple_200" -->
 
             <ImageView
                 android:id="@+id/ingredients_image_view"
@@ -36,11 +45,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/choose_nav_item"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
+            <!-- android:background="@color/purple_500" -->
 
             <ImageView
                 android:id="@+id/choose_image_view"
@@ -59,11 +70,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/dishes_nav_item"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
+            <!-- android:background="@color/purple_700" -->
 
             <ImageView
                 android:id="@+id/dishes_image_view"
@@ -82,12 +95,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-    <!-- TODO: Update blank fragment layout
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" /> -->
 
 </FrameLayout>
