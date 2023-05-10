@@ -1,5 +1,7 @@
 package android.meal_chooser;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +11,49 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
      */
-    Menu menu;
+    Menu actionMenu;
+    /**
+     * Key for sharing list of navigation items.
+     */
+    private static final String NAV_ITEMS = "navigationItems";
+
+    private final NavigationItem[] navigationItems = new NavigationItem[]{
+            new NavigationItem(R.drawable.icon_ingredients, R.string.title_ingredients),
+            new NavigationItem(R.drawable.icon_choose, R.string.title_choose),
+            new NavigationItem(R.drawable.icon_eat, R.string.title_dishes)
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // create data for fragment
+        Bundle navData = new Bundle();
+        navData.putSerializable(NAV_ITEMS, navigationItems);
+
+        // add fragment to placeholder
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        NavigationFragment navigationFragment = new NavigationFragment();
+        navigationFragment.setArguments(navData);
+        fragmentTransaction.add(
+                R.id.placeholder_fragment_navigation,
+                navigationFragment,
+                "navigation_fragment"
+        );
+
+        ChooseFragment chooseFragment = new ChooseFragment();
+        // navigationFragment.setArguments(navData);
+        fragmentTransaction.add(
+                R.id.placeholder_fragment_content,
+                chooseFragment,
+                "content_fragment"
+        );
+
+        fragmentTransaction.commit();
     }
 
     /**
@@ -25,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
+        this.actionMenu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(android.meal_chooser.R.menu.menu_quiz, menu);
+        getMenuInflater().inflate(android.meal_chooser.R.menu.menu_action, menu);
         return true;
     }
 
@@ -38,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showOverflowMenu(boolean showMenu){
         // shows menu on action bar (3 dots in top right corner of the screen)
-        if (menu == null) return;
-        menu.setGroupVisible(R.id.main_menu_group, showMenu);
+        if (actionMenu == null) return;
+        actionMenu.setGroupVisible(R.id.main_menu_group, showMenu);
     }
 
     /**
