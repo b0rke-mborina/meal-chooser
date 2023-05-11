@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
      * Menu reference field.
      */
     Menu actionMenu;
+
     /**
      * Key for sharing list of navigation items.
      */
@@ -24,19 +25,70 @@ public class MainActivity extends AppCompatActivity {
             new NavigationItem(R.drawable.icon_eat, R.string.title_dishes)
     };
 
+    /**
+     * Key for sharing list of navigation items.
+     */
+    private static final String DEFAULT_TIME = "defaultTime";
+
+    private int defaultTime = 20;
+
+    /**
+     * Key for sharing list of ingredients.
+     */
+    private static final String INGREDIENTS = "ingredients";
+
+    private Ingredient[] ingredients = new Ingredient[]{
+        new Ingredient("Rice", 3),
+        new Ingredient("Sausage", 1),
+        new Ingredient("Potato", 2),
+        new Ingredient("Cheese", 1),
+        new Ingredient("Apple", 2),
+        new Ingredient("Bread", 1),
+        new Ingredient("Strawberry", 3),
+        new Ingredient("Sour cream", 1),
+        new Ingredient("Mayonnaise", 1)
+    };
+
+    /**
+     * Key for sharing list of dishes.
+     */
+    private static final String DISHES = "dishes";
+
+    private Dish[] dishes = new Dish[]{
+            new Dish("Pasta carbonara", 20, new Ingredient[]{
+                    new Ingredient("Pasta", 1),
+                    new Ingredient("Bacon", 1)
+            }),
+            new Dish("Risotto", 35, new Ingredient[]{
+                    new Ingredient("Rice", 1),
+                    new Ingredient("Salsa", 1)
+            }),
+            new Dish("Toast", 8, new Ingredient[]{
+                    new Ingredient("Bread", 1),
+                    new Ingredient("Cheese", 1)
+            }),
+            new Dish("Tortillas", 1, new Ingredient[]{
+                    new Ingredient("Tortilla", 2),
+                    new Ingredient("Chicken meat", 1)
+            }),
+            new Dish("Fruit salad", 5, new Ingredient[]{
+                    new Ingredient("Apple", 2),
+                    new Ingredient("Strawberry", 3)
+            }),
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // create data for fragment
-        Bundle navData = new Bundle();
-        navData.putSerializable(NAV_ITEMS, navigationItems);
-
         // add fragment to placeholder
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // create data for fragment
+        Bundle navData = new Bundle();
+        navData.putSerializable(NAV_ITEMS, navigationItems);
 
         NavigationFragment navigationFragment = new NavigationFragment();
         navigationFragment.setArguments(navData);
@@ -46,12 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 "navigation_fragment"
         );
 
+        // create data for fragment
+        Bundle chooseData = new Bundle();
+        chooseData.putInt(DEFAULT_TIME, defaultTime);
+
+        // TODO: replace this with changeContentFragment(...) call
         ChooseFragment chooseFragment = new ChooseFragment();
-        // navigationFragment.setArguments(navData);
+        chooseFragment.setArguments(chooseData);
         fragmentTransaction.add(
                 R.id.placeholder_fragment_content,
                 chooseFragment,
-                "content_fragment"
+                "choose_fragment"
         );
 
         fragmentTransaction.commit();
@@ -101,7 +158,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeContentFragment(Fragment fragment, String tag) {
+        // create data for fragment
+        Bundle navData = new Bundle();
+        switch (tag) {
+            case "ingredients_fragment":
+                navData.putSerializable(INGREDIENTS, ingredients);
+                break;
+            case "choose_fragment":
+                navData.putInt(DEFAULT_TIME, defaultTime);
+                break;
+            case "dishes_fragment":
+                navData.putSerializable(DISHES, dishes);
+                break;
+        }
+
+        // change fragment using fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragment.setArguments(navData);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(
                 R.id.placeholder_fragment_content, fragment, tag

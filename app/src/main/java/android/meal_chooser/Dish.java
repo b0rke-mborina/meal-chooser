@@ -1,31 +1,39 @@
 package android.meal_chooser;
 
-public class Dish {
+import java.io.Serializable;
+
+public class Dish implements Serializable {
     private String name;
-    private Ingredient[] ingredients;
     private double timeToMakeInMinutes;
+    private Ingredient[] ingredients;
+
+    Dish(String name, double timeToMakeInMinutes, Ingredient[] ingredients) {
+        this.name = name;
+        this.timeToMakeInMinutes = timeToMakeInMinutes;
+        this.ingredients = ingredients;
+    }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setIngredients(Ingredient[] ingredients) {
-        this.ingredients = ingredients;
     }
 
     public void setTimeToMakeInMinutes(double timeToMakeInMinutes) {
         this.timeToMakeInMinutes = timeToMakeInMinutes;
     }
 
+    public void setIngredients(Ingredient[] ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public String getName() {
         return name;
     }
 
-    public Ingredient[] getIngredients() {
-        return ingredients;
-    }
-
     public double getTimeToMakeInMinutes() {
         return timeToMakeInMinutes;
+    }
+
+    public Ingredient[] getIngredients() {
+        return ingredients;
     }
 }

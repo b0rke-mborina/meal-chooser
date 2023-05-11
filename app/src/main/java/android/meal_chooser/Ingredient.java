@@ -1,8 +1,15 @@
 package android.meal_chooser;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
     private String name;
     private int amount;
+
+    Ingredient(String name, int amount) {
+        this.name = name;
+        this.amount = amount;
+    }
 
     public void setName(String name) {
         this.name = name;

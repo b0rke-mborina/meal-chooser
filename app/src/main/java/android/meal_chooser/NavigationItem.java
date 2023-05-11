@@ -1,6 +1,8 @@
 package android.meal_chooser;
 
-public class NavigationItem {
+import java.io.Serializable;
+
+public class NavigationItem implements Serializable {
     private int icon;
     private int title;
 

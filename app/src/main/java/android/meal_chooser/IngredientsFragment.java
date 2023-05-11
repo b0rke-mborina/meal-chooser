@@ -1,5 +1,6 @@
 package android.meal_chooser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,21 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link IngredientsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class IngredientsFragment extends Fragment {
+    /**
+     * Key for sharing list of ingredients.
+     */
+    private static final String INGREDIENTS = "ingredients";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Ingredient[] items;
 
     private ImageButton mButtonAdd;
 
@@ -30,19 +30,15 @@ public class IngredientsFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment IngredientsFragment.
+     *
+     * @param ingredients Existing ingredient objects.
+     * @return Instance of the fragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static IngredientsFragment newInstance(String param1, String param2) {
+    public static IngredientsFragment newInstance(Ingredient[] ingredients) {
         IngredientsFragment fragment = new IngredientsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(INGREDIENTS, ingredients);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,8 +47,7 @@ public class IngredientsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            items = (Ingredient[]) getArguments().getSerializable(INGREDIENTS);
         }
     }
 
@@ -62,9 +57,17 @@ public class IngredientsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
+
+
+        // button for adding add new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);
         mButtonAdd.setOnClickListener(v -> {
             System.out.println("Clicked!");
+            // start new activity which shows result
+            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            Intent intent = new Intent(thisActivity, IngredientActivity.class);
+            // intent.putExtra(RESULT, result);
+            startActivity(intent);
         });
 
         return view;
