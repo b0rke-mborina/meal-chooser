@@ -3,11 +3,17 @@ package android.meal_chooser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +31,16 @@ public class DishesFragment extends Fragment {
 
     private ImageButton mButtonAdd;
 
+    /**
+     * Adapter for list of dishes
+     */
+    private SimpleAdapter itemsAdapter;
+
+    /**
+     * Container which is a ListView and contains dish items.
+     */
+    private ListView mListContainer;
+
     public DishesFragment() {
         // Required empty public constructor
     }
@@ -32,7 +48,7 @@ public class DishesFragment extends Fragment {
     /**
      *
      *
-     * @param ingredients Existing ingredient objects.
+     * @param dishes Existing dish objects.
      * @return Instance of the fragment.
      */
     public static DishesFragment newInstance(Dish[] dishes) {
@@ -57,7 +73,35 @@ public class DishesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dishes, container, false);
 
+        // create data for adapter from fragment argument
+        List<HashMap<String, String>> dishListItems = new ArrayList<>();
+        for (Dish item : items) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("dishTime", item.getTimeToMakeInMinutes() + " min");
+            hashMap.put("dishName", item.getName());
+            dishListItems.add(hashMap);
+        }
 
+        // define adapter with custom mapping
+        String[] from = {"dishTime", "dishName"};
+        int[] to = {R.id.item_time, R.id.item_text};
+        itemsAdapter = new SimpleAdapter(getActivity(), dishListItems,
+                R.layout.dish_list_item, from, to);
+
+        // referencing, setting adapter and adding listeners to items of list container
+        mListContainer = view.findViewById(R.id.list_container);
+        mListContainer.setAdapter(itemsAdapter);
+
+        mListContainer.setOnItemLongClickListener((parent, v, position, id) -> {
+            System.out.println("Hold");
+            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            PopupMenu popup = new PopupMenu(thisActivity, v);
+            // inflate the popup using xml file
+            popup.getMenuInflater()
+                    .inflate(R.menu.menu_popup, popup.getMenu());
+            popup.show();
+            return true;
+        });
 
         // button for adding add new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);

@@ -3,11 +3,19 @@ package android.meal_chooser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +32,16 @@ public class IngredientsFragment extends Fragment {
     private Ingredient[] items;
 
     private ImageButton mButtonAdd;
+
+    /**
+     * Adapter for list of ingredients
+     */
+    private SimpleAdapter itemsAdapter;
+
+    /**
+     * Container which is a ListView and contains ingredient items.
+     */
+    private ListView mListContainer;
 
     public IngredientsFragment() {
         // Required empty public constructor
@@ -57,7 +75,35 @@ public class IngredientsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
+        // create data for adapter from fragment argument
+        List<HashMap<String, String>> ingredientListItems = new ArrayList<>();
+        for (Ingredient item : items) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("ingredientAmount", String.valueOf(item.getAmount()));
+            hashMap.put("ingredientName", item.getName());
+            ingredientListItems.add(hashMap);
+        }
 
+        // define adapter with custom mapping
+        String[] from = {"ingredientAmount", "ingredientName"};
+        int[] to = {R.id.item_amount, R.id.item_text};
+        itemsAdapter = new SimpleAdapter(getActivity(), ingredientListItems,
+                R.layout.ingredient_list_item, from, to);
+
+        // referencing, setting adapter and adding listeners to items of list container
+        mListContainer = view.findViewById(R.id.list_container);
+        mListContainer.setAdapter(itemsAdapter);
+
+        mListContainer.setOnItemLongClickListener((parent, v, position, id) -> {
+            System.out.println("Hold");
+            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            PopupMenu popup = new PopupMenu(thisActivity, v);
+            // inflate the popup using xml file
+            popup.getMenuInflater()
+                    .inflate(R.menu.menu_popup, popup.getMenu());
+            popup.show();
+            return true;
+        });
 
         // button for adding add new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);
