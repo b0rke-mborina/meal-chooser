@@ -1,11 +1,16 @@
 package android.meal_chooser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +27,10 @@ public class ChooseFragment extends Fragment {
     private int defaultTime;
 
     private EditText mInputTime;
+    private Button mButtonChangeIngredients;
+    private Button mButtonChangeDishes;
+    private Button mButtonChooseDish;
+    private ImageButton mIconButtonHistory;
 
     public ChooseFragment() {
         // Required empty public constructor
@@ -58,6 +67,38 @@ public class ChooseFragment extends Fragment {
         mInputTime = view.findViewById(R.id.input_time);
         System.out.println(defaultTime);
         mInputTime.setText(String.valueOf(defaultTime));
+
+        mButtonChangeIngredients = view.findViewById(R.id.button_change_ingredients);
+        mButtonChangeIngredients.setOnClickListener(v -> {
+            IngredientsFragment ingredientsFragment = new IngredientsFragment();
+            ((MainActivity) Objects.requireNonNull(getActivity())).changeContentFragment(ingredientsFragment, "ingredients_fragment");
+        });
+
+        mButtonChangeDishes = view.findViewById(R.id.button_change_dishes);
+        mButtonChangeDishes.setOnClickListener(v -> {
+            DishesFragment dishesFragment = new DishesFragment();
+            ((MainActivity) Objects.requireNonNull(getActivity())).changeContentFragment(dishesFragment, "dishes_fragment");
+        });
+
+        mButtonChooseDish = view.findViewById(R.id.button_choose_dish);
+        mButtonChooseDish.setOnClickListener(v -> {
+            System.out.println("Choose selected.");
+            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            // Intent intent = new Intent(thisActivity, IngredientActivity.class);
+            // intent.putExtra(RESULT, result);
+            // startActivity(intent);
+        });
+
+        mIconButtonHistory = view.findViewById(R.id.button_history);
+        mIconButtonHistory.setOnClickListener(v -> {
+            System.out.println("History checked.");
+            // start new activity which shows result
+            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            // Intent intent = new Intent(thisActivity, IngredientActivity.class);
+            // intent.putExtra(RESULT, result);
+            // startActivity(intent);
+        });
+
 
         return view;
     }

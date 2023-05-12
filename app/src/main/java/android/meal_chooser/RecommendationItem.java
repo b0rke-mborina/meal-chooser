@@ -8,6 +8,13 @@ public class RecommendationItem implements Serializable {
     private String dishName;
     private long timestamp;
 
+    public RecommendationItem(long id, long dishId, String dishName, long timestamp) {
+        this.id = id;
+        this.dishId = dishId;
+        this.dishName = dishName;
+        this.timestamp = timestamp;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

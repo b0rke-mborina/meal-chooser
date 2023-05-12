@@ -87,6 +87,24 @@ public class MainActivity extends AppCompatActivity {
         ),
     };
 
+    /**
+     * Key for sharing list of recommendation history items.
+     */
+    private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
+
+    RecommendationItem[] recommendationItems = new RecommendationItem[]{
+            new RecommendationItem(1, 8, "Doner kebab", 1683904471),
+            new RecommendationItem(2, 1, "Pizza capricciosa", 1683911916),
+            new RecommendationItem(3, 10, "Cheeseburger", 1683911671),
+            new RecommendationItem(4, 3, "Pizza margherita", 1683911959),
+            new RecommendationItem(5, 7, "Mexican food", 1683911969),
+            new RecommendationItem(6, 4, "Pasta carbonara", 1683911979),
+            new RecommendationItem(7, 2, "Hot dog", 1683911992),
+            new RecommendationItem(8, 9, "Sausages", 1683912001),
+            new RecommendationItem(9, 6, "Toast", 1683912010),
+            new RecommendationItem(10, 5, "Croissant", 1683912034),
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
