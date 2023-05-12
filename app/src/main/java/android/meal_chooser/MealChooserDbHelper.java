@@ -30,6 +30,7 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
     final String TABLE_RECOMMENDATION_HISTORY = "recommendation_history";
     final String RECOMMENDATION_HISTORY_ID = "id";
     final String RECOMMENDATION_HISTORY_DISH_ID = "dish_id";
+    final String RECOMMENDATION_HISTORY_DISH_NAME = "dish_name";
     final String RECOMMENDATION_HISTORY_TIMESTAMP = "timestamp";
 
     public MealChooserDbHelper(Context context) {
@@ -65,6 +66,7 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createIngredientDishTableQuery = "CREATE TABLE " + TABLE_INGREDIENT_DISH + "("
                 + INGREDIENT_DISH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + INGREDIENT_DISH_DISH_ID + " INTEGER,"
+                + RECOMMENDATION_HISTORY_DISH_NAME + " TEXT,"
                 + INGREDIENT_DISH_INGREDIENT_ID + " INTEGER,"
                 + "FOREIGN KEY(" + INGREDIENT_DISH_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + "),"
                 + "FOREIGN KEY(" + INGREDIENT_DISH_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENT + "(" + INGREDIENT_ID + ")"

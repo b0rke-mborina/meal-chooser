@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import java.util.Date;
 
 public class MealChooserDataSource {
     MealChooserDbHelper databaseHelper;
@@ -67,13 +68,17 @@ public class MealChooserDataSource {
                 dishes[index] = dish;
             }
         }
+        cursor.close();
 
         return dishes;
     }
 
     public Ingredient[] getAllIngredients() {
+        String selection = databaseHelper.INGREDIENT_BELONGS_TO_DISH + " = ?";
+        String[] selectionArgs = {String.valueOf(0)};
+
         Cursor cursor = database.query(databaseHelper.TABLE_INGREDIENT, ingredientColumns,
-                null, null, null, null, null);
+                selection, selectionArgs, null, null, null);
         System.out.println("Returned " + cursor.getCount() + " rows");
         Ingredient[] ingredients = new Ingredient[cursor.getCount()];
 
@@ -103,15 +108,12 @@ public class MealChooserDataSource {
 
                 int indexBelongsToDish = cursor.getColumnIndex(databaseHelper.INGREDIENT_BELONGS_TO_DISH);
                 int belongsToDishValue = cursor.getInt(indexBelongsToDish);
-                if (belongsToDishValue == 1) {
-                    ingredient.setBelongsToDish(true);
-                } else {
-                    ingredient.setBelongsToDish(false);
-                }
+                ingredient.setBelongsToDish(belongsToDishValue == 1);
 
                 ingredients[index] = ingredient;
             }
         }
+        cursor.close();
 
         return ingredients;
     }
@@ -137,18 +139,44 @@ public class MealChooserDataSource {
         return ingredient;
     }
 
+    public RecommendationItem createRecommendationItem(RecommendationItem recommendationItem) {
+        ContentValues values = new ContentValues();
+        values.put(databaseHelper.RECOMMENDATION_HISTORY_DISH_ID, recommendationItem.getId());
+        values.put(databaseHelper.RECOMMENDATION_HISTORY_TIMESTAMP, new Date().getTime() / 1000L);
+        long insertedId = database.insert(databaseHelper.TABLE_RECOMMENDATION_HISTORY, null, values);
+        recommendationItem.setId(insertedId);
+        return recommendationItem;
+    }
+
     public Dish updateDish(Dish dish) {
         long dishId = dish.getId();
 
         ContentValues values = new ContentValues();
         values.put(databaseHelper.DISH_NAME, dish.getName());
         values.put(databaseHelper.DISH_TIME_TO_MAKE_IN_MINUTES, dish.getTimeToMakeInMinutes());
+        values.put(databaseHelper.DISH_IS_CONSIDERED, dish.isConsidered());
 
         String selection = databaseHelper.DISH_ID + " = ?";
         String[] selectionArgs = { String.valueOf(dishId) };
 
         database.update(databaseHelper.TABLE_DISH, values, selection, selectionArgs);
         return dish;
+    }
+
+    public Ingredient updateIngredient(Ingredient ingredient) {
+        long ingredientId = ingredient.getId();
+
+        ContentValues values = new ContentValues();
+        values.put(databaseHelper.INGREDIENT_NAME, ingredient.getName());
+        values.put(databaseHelper.INGREDIENT_AMOUNT, ingredient.getAmount());
+        values.put(databaseHelper.INGREDIENT_IS_AVAILABLE, ingredient.isAvailable());
+        values.put(databaseHelper.INGREDIENT_BELONGS_TO_DISH, ingredient.belongsToDish());
+
+        String selection = databaseHelper.INGREDIENT_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(ingredientId) };
+
+        database.update(databaseHelper.TABLE_INGREDIENT, values, selection, selectionArgs);
+        return ingredient;
     }
 
     public void deleteDish(int dishId) {
@@ -159,5 +187,10 @@ public class MealChooserDataSource {
     public void deleteIngredient(int ingredientId) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         db.delete(databaseHelper.TABLE_INGREDIENT, databaseHelper.INGREDIENT_ID + " = ?", new String[]{String.valueOf(ingredientId)});
+    }
+
+    public void deleteRecommendationItem(int recommendationItemId) {
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.delete(databaseHelper.TABLE_RECOMMENDATION_HISTORY, databaseHelper.RECOMMENDATION_HISTORY_ID + " = ?", new String[]{String.valueOf(recommendationItemId)});
     }
 }
