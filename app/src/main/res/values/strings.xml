@@ -17,4 +17,10 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+
+    <string name="time_minutes">Time (minutes)</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="dishes">Dishes</string>
+    <string name="change">Change</string>
+    <string name="choose_dish">Choose a dish</string>
 </resources>

@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Optional;
-
 public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
