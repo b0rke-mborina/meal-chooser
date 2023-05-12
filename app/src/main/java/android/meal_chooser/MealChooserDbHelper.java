@@ -12,12 +12,15 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
     final String TABLE_DISH = "dish";
     final String DISH_ID = "id";
     final String DISH_NAME = "name";
-    final String DISH_TIME_TO_MAKE = "time_to_make";
+    final String DISH_TIME_TO_MAKE_IN_MINUTES = "time_to_make_in_minutes";
+    final String DISH_IS_CONSIDERED = "is_considered";
 
     final String TABLE_INGREDIENT = "ingredient";
     final String INGREDIENT_ID = "id";
     final String INGREDIENT_NAME = "name";
     final String INGREDIENT_AMOUNT = "amount";
+    final String INGREDIENT_IS_AVAILABLE = "is_available";
+    final String INGREDIENT_BELONGS_TO_DISH = "belongs_to_dish";
 
     final String TABLE_INGREDIENT_DISH = "ingredient_dish";
     final String INGREDIENT_DISH_ID = "id";
@@ -43,7 +46,8 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createDishTableQuery = "CREATE TABLE " + TABLE_DISH + "("
                 + DISH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + DISH_NAME + " TEXT,"
-                + DISH_TIME_TO_MAKE + " TEXT"
+                + DISH_TIME_TO_MAKE_IN_MINUTES + " DOUBLE,"
+                + DISH_IS_CONSIDERED + " INTEGER"
                 + ")";
         db.execSQL(createDishTableQuery);
 
@@ -51,7 +55,9 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createIngredientTableQuery = "CREATE TABLE " + TABLE_INGREDIENT + "("
                 + INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + INGREDIENT_NAME + " TEXT,"
-                + INGREDIENT_AMOUNT + " TEXT"
+                + INGREDIENT_AMOUNT + " TEXT,"
+                + INGREDIENT_IS_AVAILABLE + " INTEGER,"
+                + INGREDIENT_BELONGS_TO_DISH + " INTEGER"
                 + ")";
         db.execSQL(createIngredientTableQuery);
 
@@ -69,7 +75,7 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createRecommendationHistoryTableQuery = "CREATE TABLE " + TABLE_RECOMMENDATION_HISTORY + "("
                 + RECOMMENDATION_HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + RECOMMENDATION_HISTORY_DISH_ID + " INTEGER,"
-                + RECOMMENDATION_HISTORY_TIMESTAMP + " TIMESTAMP,"
+                + RECOMMENDATION_HISTORY_TIMESTAMP + " INTEGER,"
                 + "FOREIGN KEY(" + RECOMMENDATION_HISTORY_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + ")"
                 + ")";
         db.execSQL(createRecommendationHistoryTableQuery);

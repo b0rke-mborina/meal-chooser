@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Optional;
+
 public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
@@ -38,15 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String INGREDIENTS = "ingredients";
 
     private Ingredient[] ingredients = new Ingredient[]{
-        new Ingredient("Rice", 3),
-        new Ingredient("Sausage", 1),
-        new Ingredient("Potato", 2),
-        new Ingredient("Cheese", 1),
-        new Ingredient("Apple", 2),
-        new Ingredient("Bread", 1),
-        new Ingredient("Strawberry", 3),
-        new Ingredient("Sour cream", 1),
-        new Ingredient("Mayonnaise", 1)
+        new Ingredient("Rice", 3, true, false),
+        new Ingredient("Sausage", 1, true, false),
+        new Ingredient("Potato", 2, true, false),
+        new Ingredient("Cheese", 1, false, false),
+        new Ingredient("Apple", 2, true, false),
+        new Ingredient("Bread", 1, false, false),
+        new Ingredient("Strawberry", 3, false, false),
+        new Ingredient("Sour cream", 1, true, false),
+        new Ingredient("Mayonnaise", 1, true, false)
     };
 
     /**
@@ -55,26 +57,36 @@ public class MainActivity extends AppCompatActivity {
     private static final String DISHES = "dishes";
 
     private Dish[] dishes = new Dish[]{
-            new Dish("Pasta carbonara", 20, new Ingredient[]{
-                    new Ingredient("Pasta", 1),
-                    new Ingredient("Bacon", 1)
-            }),
-            new Dish("Risotto", 35, new Ingredient[]{
-                    new Ingredient("Rice", 1),
-                    new Ingredient("Salsa", 1)
-            }),
-            new Dish("Toast", 8, new Ingredient[]{
-                    new Ingredient("Bread", 1),
-                    new Ingredient("Cheese", 1)
-            }),
-            new Dish("Tortillas", 1, new Ingredient[]{
-                    new Ingredient("Tortilla", 2),
-                    new Ingredient("Chicken meat", 1)
-            }),
-            new Dish("Fruit salad", 5, new Ingredient[]{
-                    new Ingredient("Apple", 2),
-                    new Ingredient("Strawberry", 3)
-            }),
+        new Dish("Pasta carbonara", 20, true,
+            new Ingredient[]{
+                new Ingredient("Pasta", 1, null, true),
+                new Ingredient("Bacon", 1, null, true)
+            }
+        ),
+        new Dish("Risotto", 35, true,
+            new Ingredient[]{
+                new Ingredient("Rice", 1, null, true),
+                new Ingredient("Salsa", 1,null , true)
+            }
+        ),
+        new Dish("Toast", 8, true,
+            new Ingredient[]{
+                new Ingredient("Bread", 1, null, true),
+                new Ingredient("Cheese", 1, null, true)
+            }
+        ),
+        new Dish("Tortillas", 1, true,
+            new Ingredient[]{
+                new Ingredient("Tortilla", 2, null, true),
+                new Ingredient("Chicken meat", 1, null, true)
+            }
+        ),
+        new Dish("Fruit salad", 5, true,
+            new Ingredient[]{
+                new Ingredient("Apple", 2, null, true),
+                new Ingredient("Strawberry", 3, null, true)
+            }
+        ),
     };
 
     @Override

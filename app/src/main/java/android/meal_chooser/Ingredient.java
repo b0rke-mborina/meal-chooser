@@ -6,10 +6,18 @@ public class Ingredient implements Serializable {
     private long id;
     private String name;
     private int amount;
+    private Boolean isAvailable;
+    private boolean belongsToDish;
 
-    Ingredient(String name, int amount) {
+    Ingredient(String name, int amount, Boolean isAvailable, boolean belongsToDish) {
         this.name = name;
         this.amount = amount;
+        this.isAvailable = isAvailable;
+        this.belongsToDish = belongsToDish;
+    }
+
+    public Ingredient() {
+
     }
 
     public void setId(long id) {
@@ -24,6 +32,14 @@ public class Ingredient implements Serializable {
         this.amount = amount;
     }
 
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    public void setBelongsToDish(boolean belongsToDish) {
+        this.belongsToDish = belongsToDish;
+    }
+
     public long getId() {
         return id;
     }
@@ -34,5 +50,13 @@ public class Ingredient implements Serializable {
 
     public int getAmount() {
         return amount;
+    }
+
+    public Boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public boolean belongsToDish() {
+        return belongsToDish;
     }
 }
