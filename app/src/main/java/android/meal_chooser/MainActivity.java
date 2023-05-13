@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         // create data for fragment
         Bundle chooseData = new Bundle();
         chooseData.putInt(DEFAULT_TIME, defaultTime);
+        chooseData.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
 
         // TODO: replace this with changeContentFragment(...) call
         ChooseFragment chooseFragment = new ChooseFragment();
@@ -187,22 +188,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeContentFragment(Fragment fragment, String tag) {
         // create data for fragment
-        Bundle navData = new Bundle();
+        Bundle data = new Bundle();
         switch (tag) {
             case "ingredients_fragment":
-                navData.putSerializable(INGREDIENTS, ingredients);
+                data.putSerializable(INGREDIENTS, ingredients);
                 break;
             case "choose_fragment":
-                navData.putInt(DEFAULT_TIME, defaultTime);
+                data.putInt(DEFAULT_TIME, defaultTime);
+                data.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
                 break;
             case "dishes_fragment":
-                navData.putSerializable(DISHES, dishes);
+                data.putSerializable(DISHES, dishes);
                 break;
         }
 
         // change fragment using fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragment.setArguments(navData);
+        fragment.setArguments(data);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(
                 R.id.placeholder_fragment_content, fragment, tag

@@ -24,7 +24,13 @@ public class ChooseFragment extends Fragment {
      */
     private static final String DEFAULT_TIME = "defaultTime";
 
+    /**
+     * Key for sharing list of recommendation history items.
+     */
+    private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
+
     private int defaultTime;
+    private RecommendationItem[] recommendationItems;
 
     private EditText mInputTime;
     private Button mButtonChangeIngredients;
@@ -42,10 +48,11 @@ public class ChooseFragment extends Fragment {
      * @param defaultTime Last selected time limit.
      * @return Instance of the fragment.
      */
-    public static ChooseFragment newInstance(int defaultTime) {
+    public static ChooseFragment newInstance(int defaultTime, RecommendationItem[] recommendationItems) {
         ChooseFragment fragment = new ChooseFragment();
         Bundle args = new Bundle();
         args.putInt(DEFAULT_TIME, defaultTime);
+        args.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +62,7 @@ public class ChooseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             defaultTime = getArguments().getInt(DEFAULT_TIME);
+            recommendationItems = (RecommendationItem[]) getArguments().getSerializable(RECOMMENDATION_HISTORY_ITEMS);
         }
     }
 
@@ -94,9 +102,9 @@ public class ChooseFragment extends Fragment {
             System.out.println("History checked.");
             // start new activity which shows result
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
-            // Intent intent = new Intent(thisActivity, IngredientActivity.class);
-            // intent.putExtra(RESULT, result);
-            // startActivity(intent);
+            Intent intent = new Intent(thisActivity, RecommendationHistoryActivity.class);
+            intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
+            startActivity(intent);
         });
 
 

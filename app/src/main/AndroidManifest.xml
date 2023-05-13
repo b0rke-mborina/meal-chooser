@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Mealchooser"
         tools:targetApi="31">
         <activity
+            android:name=".RecommendationHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".DishActivity"
             android:exported="false" />
         <activity
