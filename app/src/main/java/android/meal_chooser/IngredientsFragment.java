@@ -3,16 +3,12 @@ package android.meal_chooser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +32,7 @@ public class IngredientsFragment extends Fragment {
     /**
      * Adapter for list of ingredients
      */
-    private SimpleAdapter itemsAdapter;
+    private CustomAdapter itemsAdapter;
 
     /**
      * Container which is a ListView and contains ingredient items.
@@ -79,31 +75,33 @@ public class IngredientsFragment extends Fragment {
         List<HashMap<String, String>> ingredientListItems = new ArrayList<>();
         for (Ingredient item : items) {
             HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("ingredientId", String.valueOf(item.getId()));
             hashMap.put("ingredientAmount", String.valueOf(item.getAmount()));
             hashMap.put("ingredientName", item.getName());
+            hashMap.put("ingredientIsAvailable", String.valueOf(item.isAvailable()));
             ingredientListItems.add(hashMap);
         }
 
         // define adapter with custom mapping
-        String[] from = {"ingredientAmount", "ingredientName"};
-        int[] to = {R.id.item_amount, R.id.item_text};
-        itemsAdapter = new SimpleAdapter(getActivity(), ingredientListItems,
-                R.layout.ingredient_list_item, from, to);
+        String[] from = {"ingredientAmount", "ingredientName", "ingredientIsAvailable"};
+        int[] to = {R.id.item_amount, R.id.item_text, R.id.item_is_available};
 
-        // referencing, setting adapter and adding listeners to items of list container
-        mListContainer = view.findViewById(R.id.list_container);
-        mListContainer.setAdapter(itemsAdapter);
 
-        mListContainer.setOnItemLongClickListener((parent, v, position, id) -> {
-            System.out.println("Hold");
+        itemsAdapter = new CustomAdapter(getActivity(), ingredientListItems, from, to);
+        itemsAdapter.setOnItemLongClickListener((parent, view1, position, id) -> {
+            System.out.println("Holded " + items[position].getId());
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
-            PopupMenu popup = new PopupMenu(thisActivity, v);
+            PopupMenu popup = new PopupMenu(thisActivity, view1);
             // inflate the popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_popup, popup.getMenu());
             popup.show();
             return true;
         });
+
+        // referencing, setting adapter and adding listeners to items of list container
+        mListContainer = view.findViewById(R.id.list_container);
+        mListContainer.setAdapter(itemsAdapter);
 
         // button for adding add new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);

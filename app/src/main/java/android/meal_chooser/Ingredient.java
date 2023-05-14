@@ -9,7 +9,8 @@ public class Ingredient implements Serializable {
     private Boolean isAvailable;
     private boolean belongsToDish;
 
-    Ingredient(String name, int amount, Boolean isAvailable, boolean belongsToDish) {
+    Ingredient(long id, String name, int amount, Boolean isAvailable, boolean belongsToDish) {
+        this.id = id;
         this.name = name;
         this.amount = amount;
         this.isAvailable = isAvailable;

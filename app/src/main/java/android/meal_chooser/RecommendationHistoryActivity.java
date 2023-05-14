@@ -2,6 +2,7 @@ package android.meal_chooser;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.text.SimpleDateFormat;
@@ -67,6 +68,15 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
         mListContainer = findViewById(R.id.list_container);
         mListContainer.setAdapter(itemsAdapter);
 
+        mListContainer.setOnItemLongClickListener((parent, v, position, id) -> {
+            System.out.println("Hold");
+            PopupMenu popup = new PopupMenu(RecommendationHistoryActivity.this, v);
+            // inflate the popup using xml file
+            popup.getMenuInflater()
+                    .inflate(R.menu.menu_popup_delete, popup.getMenu());
+            popup.show();
+            return true;
+        });
     }
 
     /**

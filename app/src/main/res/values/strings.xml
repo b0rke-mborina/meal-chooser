@@ -25,4 +25,7 @@
     <string name="choose_dish">Choose a dish</string>
 
     <string name="heading_recommendation_history">Recommendation history</string>
+
+    <string name="amount">Amount</string>
+    <string name="is_available">Is available?</string>
 </resources>

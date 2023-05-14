@@ -38,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String INGREDIENTS = "ingredients";
 
     private Ingredient[] ingredients = new Ingredient[]{
-        new Ingredient("Rice", 3, true, false),
-        new Ingredient("Sausage", 1, true, false),
-        new Ingredient("Potato", 2, true, false),
-        new Ingredient("Cheese", 1, false, false),
-        new Ingredient("Apple", 2, true, false),
-        new Ingredient("Bread", 1, false, false),
-        new Ingredient("Strawberry", 3, false, false),
-        new Ingredient("Sour cream", 1, true, false),
-        new Ingredient("Mayonnaise", 1, true, false)
+        new Ingredient(11, "Rice", 3, true, false),
+        new Ingredient(12, "Sausage", 1, true, false),
+        new Ingredient(13, "Potato", 2, true, false),
+        new Ingredient(14, "Cheese", 1, false, false),
+        new Ingredient(15, "Apple", 2, true, false),
+        new Ingredient(16, "Bread", 1, false, false),
+        new Ingredient(17, "Strawberry", 3, false, false),
+        new Ingredient(18, "Sour cream", 1, true, false),
+        new Ingredient(19, "Mayonnaise", 1, true, false)
     };
 
     /**
@@ -57,32 +57,32 @@ public class MainActivity extends AppCompatActivity {
     private Dish[] dishes = new Dish[]{
         new Dish("Pasta carbonara", 20, true,
             new Ingredient[]{
-                new Ingredient("Pasta", 1, null, true),
-                new Ingredient("Bacon", 1, null, true)
+                new Ingredient(21, "Pasta", 1, null, true),
+                new Ingredient(22, "Bacon", 1, null, true)
             }
         ),
         new Dish("Risotto", 35, true,
             new Ingredient[]{
-                new Ingredient("Rice", 1, null, true),
-                new Ingredient("Salsa", 1,null , true)
+                new Ingredient(23, "Rice", 1, null, true),
+                new Ingredient(24, "Salsa", 1,null , true)
             }
         ),
         new Dish("Toast", 8, true,
             new Ingredient[]{
-                new Ingredient("Bread", 1, null, true),
-                new Ingredient("Cheese", 1, null, true)
+                new Ingredient(25, "Bread", 1, null, true),
+                new Ingredient(26, "Cheese", 1, null, true)
             }
         ),
         new Dish("Tortillas", 1, true,
             new Ingredient[]{
-                new Ingredient("Tortilla", 2, null, true),
-                new Ingredient("Chicken meat", 1, null, true)
+                new Ingredient(27, "Tortilla", 2, null, true),
+                new Ingredient(28, "Chicken meat", 1, null, true)
             }
         ),
         new Dish("Fruit salad", 5, true,
             new Ingredient[]{
-                new Ingredient("Apple", 2, null, true),
-                new Ingredient("Strawberry", 3, null, true)
+                new Ingredient(29, "Apple", 2, null, true),
+                new Ingredient(30, "Strawberry", 3, null, true)
             }
         ),
     };

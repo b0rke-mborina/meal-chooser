@@ -24,7 +24,9 @@
             android:id="@+id/list_container"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false" />
 
     </LinearLayout>
 

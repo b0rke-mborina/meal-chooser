@@ -6,9 +6,9 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
     android:orientation="horizontal"
-    android:weightSum="3">
+    android:weightSum="4">
 
-    <!-- Image view for ingredient photo -->
+    <!-- Text view for ingredient photo -->
     <TextView
         android:id="@+id/item_amount"
         android:text=""
@@ -29,5 +29,22 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:gravity="center_vertical" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <CheckBox
+            android:id="@+id/item_is_available"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
 
 </LinearLayout>
