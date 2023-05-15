@@ -15,13 +15,15 @@ public class CustomAdapter extends BaseAdapter {
     private List<HashMap<String, String>> data;
     private Context context;
     private LayoutInflater inflater;
+    private int layout;
     private String[] from;
     private int[] to;
     private AdapterView.OnItemLongClickListener onItemLongClickListener;
 
-    public CustomAdapter(Context context, List<HashMap<String, String>> data, String[] from, int[] to) {
+    public CustomAdapter(Context context, List<HashMap<String, String>> data, int layout, String[] from, int[] to) {
         this.context = context;
         this.data = data;
+        this.layout = layout;
         this.from = from;
         this.to = to;
         inflater = LayoutInflater.from(context);
@@ -51,9 +53,15 @@ public class CustomAdapter extends BaseAdapter {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.ingredient_list_item, parent, false);
+            convertView = inflater.inflate(layout, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.checkBox = convertView.findViewById(R.id.item_is_available);
+
+            if (layout == R.layout.ingredient_list_item) {
+                viewHolder.checkBox = convertView.findViewById(R.id.item_is_available);
+            } else {
+                viewHolder.checkBox = convertView.findViewById(R.id.item_is_considered);
+            }
+
             viewHolder.checkBox.setOnCheckedChangeListener(null);
             viewHolder.checkBox.setFocusable(false);
             convertView.setTag(viewHolder);
@@ -75,15 +83,24 @@ public class CustomAdapter extends BaseAdapter {
             }
         }
 
-        String booleanValue = item.get("ingredientIsAvailable");
+        String booleanValue;
+        if (layout == R.layout.ingredient_list_item) {
+            booleanValue = item.get("ingredientIsAvailable");
+        } else {
+            booleanValue = item.get("dishIsConsidered");
+        }
         boolean isChecked = Boolean.parseBoolean(booleanValue);
         viewHolder.checkBox.setChecked(isChecked);
         viewHolder.checkBox.setText("");
 
         viewHolder.checkBox.setOnCheckedChangeListener((buttonView, checked) -> {
-            System.out.println(item.get("ingredientId") + " " + checked);
-            item.put("ingredientIsAvailable", String.valueOf(checked));
-            // Handle checkbox state change if needed
+            if (layout == R.layout.ingredient_list_item) {
+                System.out.println(item.get("ingredientId") + " " + checked);
+                item.put("ingredientIsAvailable", String.valueOf(checked));
+            } else {
+                System.out.println(item.get("dishId") + " " + checked);
+                item.put("dishIsConsidered", String.valueOf(checked));
+            }
         });
 
         convertView.setOnLongClickListener(v -> {

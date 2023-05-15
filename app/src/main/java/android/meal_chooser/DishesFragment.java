@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ public class DishesFragment extends Fragment {
     /**
      * Adapter for list of dishes
      */
-    private SimpleAdapter itemsAdapter;
+    private CustomAdapter itemsAdapter;
 
     /**
      * Container which is a ListView and contains dish items.
@@ -77,22 +76,20 @@ public class DishesFragment extends Fragment {
         List<HashMap<String, String>> dishListItems = new ArrayList<>();
         for (Dish item : items) {
             HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("dishId", String.valueOf(item.getId()));
             hashMap.put("dishTime", item.getTimeToMakeInMinutes() + " min");
             hashMap.put("dishName", item.getName());
+            hashMap.put("dishIsConsidered", String.valueOf(item.isConsidered()));
             dishListItems.add(hashMap);
         }
 
         // define adapter with custom mapping
-        String[] from = {"dishTime", "dishName"};
-        int[] to = {R.id.item_time, R.id.item_text};
-        itemsAdapter = new SimpleAdapter(getActivity(), dishListItems,
+        String[] from = {"dishTime", "dishName", "dishIsConsidered"};
+        int[] to = {R.id.item_time, R.id.item_name, R.id.item_is_considered};
+
+        itemsAdapter = new CustomAdapter(getActivity(), dishListItems,
                 R.layout.dish_list_item, from, to);
-
-        // referencing, setting adapter and adding listeners to items of list container
-        mListContainer = view.findViewById(R.id.list_container);
-        mListContainer.setAdapter(itemsAdapter);
-
-        mListContainer.setOnItemLongClickListener((parent, v, position, id) -> {
+        itemsAdapter.setOnItemLongClickListener((parent, v, position, id) -> {
             System.out.println("Hold");
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             PopupMenu popup = new PopupMenu(thisActivity, v);
@@ -102,6 +99,10 @@ public class DishesFragment extends Fragment {
             popup.show();
             return true;
         });
+
+        // referencing, setting adapter and adding listeners to items of list container
+        mListContainer = view.findViewById(R.id.list_container);
+        mListContainer.setAdapter(itemsAdapter);
 
         // button for adding add new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);

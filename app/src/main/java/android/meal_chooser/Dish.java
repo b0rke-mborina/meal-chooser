@@ -9,7 +9,8 @@ public class Dish implements Serializable {
     private boolean isConsidered;
     private Ingredient[] ingredients;
 
-    Dish(String name, double timeToMakeInMinutes, boolean isConsidered, Ingredient[] ingredients) {
+    Dish(long id, String name, double timeToMakeInMinutes, boolean isConsidered, Ingredient[] ingredients) {
+        this.id = id;
         this.name = name;
         this.timeToMakeInMinutes = timeToMakeInMinutes;
         this.isConsidered = isConsidered;

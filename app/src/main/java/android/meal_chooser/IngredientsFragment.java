@@ -84,10 +84,10 @@ public class IngredientsFragment extends Fragment {
 
         // define adapter with custom mapping
         String[] from = {"ingredientAmount", "ingredientName", "ingredientIsAvailable"};
-        int[] to = {R.id.item_amount, R.id.item_text, R.id.item_is_available};
+        int[] to = {R.id.item_amount, R.id.item_name, R.id.item_is_available};
 
-
-        itemsAdapter = new CustomAdapter(getActivity(), ingredientListItems, from, to);
+        itemsAdapter = new CustomAdapter(getActivity(), ingredientListItems,
+                R.layout.ingredient_list_item, from, to);
         itemsAdapter.setOnItemLongClickListener((parent, view1, position, id) -> {
             System.out.println("Holded " + items[position].getId());
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());

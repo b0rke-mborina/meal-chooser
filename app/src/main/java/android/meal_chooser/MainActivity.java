@@ -55,31 +55,31 @@ public class MainActivity extends AppCompatActivity {
     private static final String DISHES = "dishes";
 
     private Dish[] dishes = new Dish[]{
-        new Dish("Pasta carbonara", 20, true,
+        new Dish(101, "Pasta carbonara", 20, true,
             new Ingredient[]{
                 new Ingredient(21, "Pasta", 1, null, true),
                 new Ingredient(22, "Bacon", 1, null, true)
             }
         ),
-        new Dish("Risotto", 35, true,
+        new Dish(102, "Risotto", 35, true,
             new Ingredient[]{
                 new Ingredient(23, "Rice", 1, null, true),
                 new Ingredient(24, "Salsa", 1,null , true)
             }
         ),
-        new Dish("Toast", 8, true,
+        new Dish(103, "Toast", 8, false,
             new Ingredient[]{
                 new Ingredient(25, "Bread", 1, null, true),
                 new Ingredient(26, "Cheese", 1, null, true)
             }
         ),
-        new Dish("Tortillas", 1, true,
+        new Dish(104, "Tortillas", 1, true,
             new Ingredient[]{
                 new Ingredient(27, "Tortilla", 2, null, true),
                 new Ingredient(28, "Chicken meat", 1, null, true)
             }
         ),
-        new Dish("Fruit salad", 5, true,
+        new Dish(105, "Fruit salad", 5, false,
             new Ingredient[]{
                 new Ingredient(29, "Apple", 2, null, true),
                 new Ingredient(30, "Strawberry", 3, null, true)

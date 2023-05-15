@@ -28,4 +28,6 @@
 
     <string name="amount">Amount</string>
     <string name="is_available">Is available?</string>
+    <string name="time_to_make">Time to make</string>
+    <string name="considered">Considered?</string>
 </resources>

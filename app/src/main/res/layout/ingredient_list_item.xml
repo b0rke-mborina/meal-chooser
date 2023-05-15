@@ -21,7 +21,7 @@
 
     <!-- Text for ingredient name -->
     <TextView
-        android:id="@+id/item_text"
+        android:id="@+id/item_name"
         android:text=""
         android:layout_width="0dp"
         android:layout_height="match_parent"
