@@ -138,7 +138,7 @@
             <ImageButton
                 android:id="@+id/button_history"
                 android:layout_width="44dp"
-                android:layout_height="wrap_content"
+                android:layout_height="39dp"
                 android:scaleType="centerInside"
                 android:textColor="@color/black"
                 android:src="@drawable/icon_history"

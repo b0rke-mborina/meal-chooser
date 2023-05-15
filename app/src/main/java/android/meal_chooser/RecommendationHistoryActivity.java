@@ -6,7 +6,10 @@ import android.support.v7.widget.PopupMenu;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,18 +47,7 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
         for (RecommendationItem item : items) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("dishName", item.getDishName());
-
-            // TODO: make format of date better
-            // convert seconds to milliseconds
-            // Date date = new java.util.Date(item.getTimestamp()*1000L);
-            // the format of your date
-            // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-            // give a timezone reference for formatting (see comment at the bottom)
-            // sdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-            // String formattedDate = sdf.format(date);
-            // .out.println(formattedDate);
-            hashMap.put("dishDate", String.valueOf(new Date(item.getTimestamp()*1000)));
-
+            hashMap.put("dishDate", unixTimestampToString(item.getTimestamp() * 1000));
             dishListItems.add(hashMap);
         }
 
@@ -97,5 +89,27 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    public String unixTimestampToString(long unixTimestamp) {
+        Calendar cal = Calendar.getInstance();
+        long milliDiff = cal.get(Calendar.ZONE_OFFSET);
+        // Got local offset, now loop through available timezone id(s).
+        String [] ids = TimeZone.getAvailableIDs();
+        String name = null;
+        for (String id : ids) {
+            TimeZone tz = TimeZone.getTimeZone(id);
+            if (tz.getRawOffset() == milliDiff) {
+                // Found a match.
+                name = id;
+                break;
+            }
+        }
+        System.out.println(name);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone(name));
+        String date = sdf.format(unixTimestamp);
+        return date;
     }
 }

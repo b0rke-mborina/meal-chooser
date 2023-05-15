@@ -180,6 +180,23 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id) {
+            case R.id.settings: // android.meal_chooser.R.id.settings
+                System.out.println("Chosen: 'Settings'");
+                break;
+            case R.id.import_data:
+                System.out.println("Chosen: 'Import data'");
+                break;
+            case R.id.export_data:
+                System.out.println("Chosen: 'Export data'");
+                break;
+            case R.id.about:
+                System.out.println("Chosen: 'About'");
+                break;
+            case R.id.help:
+                System.out.println("Chosen: 'Help'");
+                break;
+        }
         if (id == android.meal_chooser.R.id.settings) {
             return true;
         }
