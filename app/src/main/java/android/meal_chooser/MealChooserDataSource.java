@@ -20,10 +20,10 @@ public class MealChooserDataSource {
             databaseHelper.INGREDIENT_NAME,
             databaseHelper.INGREDIENT_AMOUNT
     };
-    private final String[] ingredientDishColumns = {
-            databaseHelper.INGREDIENT_DISH_ID,
-            databaseHelper.INGREDIENT_DISH_DISH_ID,
-            databaseHelper.INGREDIENT_DISH_INGREDIENT_ID
+    private final String[] dishIngredientColumns = {
+            databaseHelper.DISH_INGREDIENT_ID,
+            databaseHelper.DISH_INGREDIENT_DISH_ID,
+            databaseHelper.DISH_INGREDIENT_INGREDIENT_ID
     };
     private final String[] recommendationHistoryColumns = {
             databaseHelper.RECOMMENDATION_HISTORY_ID,
@@ -57,13 +57,17 @@ public class MealChooserDataSource {
                 Dish dish = new Dish();
 
                 int indexId = cursor.getColumnIndex(databaseHelper.DISH_ID);
-                dish.setId(cursor.getInt(indexId));
+                dish.setId(cursor.getLong(indexId));
 
                 int indexName = cursor.getColumnIndex(databaseHelper.DISH_NAME);
                 dish.setName(cursor.getString(indexName));
 
                 int indexTimeToMake = cursor.getColumnIndex(databaseHelper.DISH_TIME_TO_MAKE_IN_MINUTES);
                 dish.setTimeToMakeInMinutes(cursor.getDouble(indexTimeToMake));
+
+                int indexIsConsidered = cursor.getColumnIndex(databaseHelper.DISH_IS_CONSIDERED);
+                int isConsidered = cursor.getInt(indexIsConsidered);
+                dish.setConsidered(isConsidered == 1);
 
                 dishes[index] = dish;
             }
@@ -88,7 +92,7 @@ public class MealChooserDataSource {
                 Ingredient ingredient = new Ingredient();
 
                 int indexId = cursor.getColumnIndex(databaseHelper.INGREDIENT_ID);
-                ingredient.setId(cursor.getInt(indexId));
+                ingredient.setId(cursor.getLong(indexId));
 
                 int indexName = cursor.getColumnIndex(databaseHelper.INGREDIENT_NAME);
                 ingredient.setName(cursor.getString(indexName));
@@ -118,6 +122,132 @@ public class MealChooserDataSource {
         return ingredients;
     }
 
+    public RecommendationItem[] getAllRecommendationHistoryItems() {
+        Cursor cursor = database.query(databaseHelper.TABLE_RECOMMENDATION_HISTORY, recommendationHistoryColumns,
+                null, null, null, null, null);
+        System.out.println("Returned " + cursor.getCount() + " rows");
+        RecommendationItem[] recommendationItems = new RecommendationItem[cursor.getCount()];
+
+        int index = 0;
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                RecommendationItem recommendationItem = new RecommendationItem();
+
+                int indexId = cursor.getColumnIndex(databaseHelper.RECOMMENDATION_HISTORY_ID);
+                recommendationItem.setId(cursor.getLong(indexId));
+
+                int indexDishId = cursor.getColumnIndex(databaseHelper.RECOMMENDATION_HISTORY_DISH_ID);
+                recommendationItem.setDishId(cursor.getLong(indexDishId));
+
+                int indexDishName = cursor.getColumnIndex(databaseHelper.RECOMMENDATION_HISTORY_DISH_NAME);
+                recommendationItem.setDishName(cursor.getString(indexDishName));
+
+                int indexIsTimestamp = cursor.getColumnIndex(databaseHelper.RECOMMENDATION_HISTORY_TIMESTAMP);
+                recommendationItem.setTimestamp(cursor.getLong(indexIsTimestamp));
+
+                recommendationItems[index] = recommendationItem;
+                index++;
+            }
+        }
+        cursor.close();
+
+        return recommendationItems;
+    }
+
+    // TODO: create method getDish()
+    public Dish getDish(long dishId) {
+        String selection = databaseHelper.DISH_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(dishId)};
+
+        Cursor cursor = database.query(databaseHelper.TABLE_INGREDIENT, ingredientColumns,
+                selection, selectionArgs, null, null, null);
+        // System.out.println("Returned " + cursor.getCount() + " rows");
+        Dish dish = new Dish();
+
+        if(cursor.getCount() == 1) {
+            if (cursor.moveToFirst()) {
+                int indexId = cursor.getColumnIndex(databaseHelper.DISH_ID);
+                dish.setId(cursor.getLong(indexId));
+
+                int indexName = cursor.getColumnIndex(databaseHelper.DISH_NAME);
+                dish.setName(cursor.getString(indexName));
+
+                int indexTimeToMake = cursor.getColumnIndex(databaseHelper.DISH_TIME_TO_MAKE_IN_MINUTES);
+                dish.setTimeToMakeInMinutes(cursor.getDouble(indexTimeToMake));
+
+                int indexIsConsidered = cursor.getColumnIndex(databaseHelper.DISH_IS_CONSIDERED);
+                int isConsidered = cursor.getInt(indexIsConsidered);
+                dish.setConsidered(isConsidered == 1);
+            }
+        }
+        cursor.close();
+
+        String selectionDishIngredient = databaseHelper.DISH_INGREDIENT_DISH_ID + " = ?";
+        String[] selectionArgsDishIngredient = {String.valueOf(dishId)};
+        Cursor cursorDishIngredient = database.query(databaseHelper.TABLE_DISH_INGREDIENT, dishIngredientColumns,
+                selectionDishIngredient, selectionArgsDishIngredient, null, null, null);
+        System.out.println("Returned " + cursorDishIngredient.getCount() + " rows");
+        long[] ingredientIds = new long[cursorDishIngredient.getCount()];
+
+        int index = 0;
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                int indexId = cursor.getColumnIndex(databaseHelper.DISH_INGREDIENT_INGREDIENT_ID);
+                ingredientIds[index] = cursor.getLong(indexId);
+                index++;
+            }
+        }
+        cursorDishIngredient.close();
+
+        Ingredient[] ingredients = new Ingredient[cursorDishIngredient.getCount()];
+        int indexIngredient = 0;
+        for (long ingredientId : ingredientIds) {
+            ingredients[indexIngredient] = getIngredient(ingredientId);
+        }
+        dish.setIngredients(ingredients);
+
+        return dish;
+    }
+
+    public Ingredient getIngredient(long ingredientId) {
+        String selection = databaseHelper.INGREDIENT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(ingredientId)};
+        Cursor cursor = database.query(databaseHelper.TABLE_INGREDIENT, dishIngredientColumns,
+                selection, selectionArgs, null, null, null);
+        // System.out.println("Returned " + cursorIngredient.getCount() + " rows");
+        Ingredient ingredient = new Ingredient();
+
+        if(cursor.getCount() == 1) {
+            if (cursor.moveToFirst()) {
+                int indexId = cursor.getColumnIndex(databaseHelper.INGREDIENT_ID);
+                ingredient.setId(cursor.getLong(indexId));
+
+                int indexName = cursor.getColumnIndex(databaseHelper.INGREDIENT_NAME);
+                ingredient.setName(cursor.getString(indexName));
+
+                int indexAmount = cursor.getColumnIndex(databaseHelper.INGREDIENT_AMOUNT);
+                ingredient.setAmount(cursor.getInt(indexAmount));
+
+                int indexIsAvailable = cursor.getColumnIndex(databaseHelper.INGREDIENT_IS_AVAILABLE);
+                int isAvailableValue = cursor.getInt(indexIsAvailable);
+                if (isAvailableValue == 1) {
+                    ingredient.setAvailable(true);
+                } else if (isAvailableValue == 0) {
+                    ingredient.setAvailable(false);
+                } else {
+                    ingredient.setAvailable(null);
+                }
+
+                int indexBelongsToDish = cursor.getColumnIndex(databaseHelper.INGREDIENT_BELONGS_TO_DISH);
+                int belongsToDishValue = cursor.getInt(indexBelongsToDish);
+                ingredient.setBelongsToDish(belongsToDishValue == 1);
+            }
+        }
+        cursor.close();
+
+        return ingredient;
+    }
+
     public Dish createDish(Dish dish) {
         ContentValues values = new ContentValues();
         values.put(databaseHelper.DISH_NAME, dish.getName());
@@ -125,6 +255,13 @@ public class MealChooserDataSource {
         values.put(databaseHelper.DISH_IS_CONSIDERED, dish.isConsidered());
         long insertedId = database.insert(databaseHelper.TABLE_DISH, null, values);
         dish.setId(insertedId);
+
+        long dishId = dish.getId();
+        for (Ingredient ingredient : dish.getIngredients()) {
+            createIngredient(ingredient);
+            createDishIngredient(dishId, ingredient.getId());
+        }
+
         return dish;
     }
 
@@ -137,6 +274,13 @@ public class MealChooserDataSource {
         long insertedId = database.insert(databaseHelper.TABLE_INGREDIENT, null, values);
         ingredient.setId(insertedId);
         return ingredient;
+    }
+
+    public long createDishIngredient(long dishId, long ingredientId) {
+        ContentValues values = new ContentValues();
+        values.put(databaseHelper.DISH_INGREDIENT_DISH_ID, dishId);
+        values.put(databaseHelper.DISH_INGREDIENT_INGREDIENT_ID, ingredientId);
+        return database.insert(databaseHelper.TABLE_DISH_INGREDIENT, null, values);
     }
 
     public RecommendationItem createRecommendationItem(RecommendationItem recommendationItem) {
@@ -158,8 +302,35 @@ public class MealChooserDataSource {
 
         String selection = databaseHelper.DISH_ID + " = ?";
         String[] selectionArgs = { String.valueOf(dishId) };
-
         database.update(databaseHelper.TABLE_DISH, values, selection, selectionArgs);
+
+        String selectionDishIngredient = databaseHelper.DISH_INGREDIENT_DISH_ID + " = ?";
+        String[] selectionArgsDishIngredient = {String.valueOf(dishId)};
+        Cursor cursor = database.query(databaseHelper.TABLE_DISH_INGREDIENT, dishIngredientColumns,
+                selectionDishIngredient, selectionArgsDishIngredient, null, null, null);
+        System.out.println("Returned " + cursor.getCount() + " rows");
+        long[] ingredientIds = new long[cursor.getCount()];
+
+        int index = 0;
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                int indexId = cursor.getColumnIndex(databaseHelper.DISH_INGREDIENT_INGREDIENT_ID);
+                ingredientIds[index] = cursor.getLong(indexId);
+                index++;
+            }
+        }
+        cursor.close();
+
+        database.delete(databaseHelper.TABLE_DISH_INGREDIENT, databaseHelper.DISH_INGREDIENT_DISH_ID + " = ?", new String[]{String.valueOf(dishId)});
+
+        for (long ingredientId : ingredientIds) {
+            deleteIngredient(ingredientId);
+        }
+
+        for (Ingredient ingredient : dish.getIngredients()) {
+            createIngredient(ingredient);
+        }
+
         return dish;
     }
 
@@ -179,18 +350,38 @@ public class MealChooserDataSource {
         return ingredient;
     }
 
-    public void deleteDish(int dishId) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.delete(databaseHelper.TABLE_DISH, databaseHelper.DISH_ID + " = ?", new String[]{String.valueOf(dishId)});
+    public void deleteDish(long dishId) {
+        database.delete(databaseHelper.TABLE_DISH, databaseHelper.DISH_ID + " = ?", new String[]{String.valueOf(dishId)});
+
+        String selectionDishIngredient = databaseHelper.DISH_INGREDIENT_DISH_ID + " = ?";
+        String[] selectionArgsDishIngredient = {String.valueOf(dishId)};
+        Cursor cursor = database.query(databaseHelper.TABLE_DISH_INGREDIENT, dishIngredientColumns,
+                selectionDishIngredient, selectionArgsDishIngredient, null, null, null);
+        System.out.println("Returned " + cursor.getCount() + " rows");
+        long[] ingredientIds = new long[cursor.getCount()];
+
+        int index = 0;
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                int indexId = cursor.getColumnIndex(databaseHelper.DISH_INGREDIENT_INGREDIENT_ID);
+                ingredientIds[index] = cursor.getLong(indexId);
+                index++;
+            }
+        }
+        cursor.close();
+
+        database.delete(databaseHelper.TABLE_DISH_INGREDIENT, databaseHelper.DISH_INGREDIENT_DISH_ID + " = ?", new String[]{String.valueOf(dishId)});
+
+        for (long ingredientId : ingredientIds) {
+            deleteIngredient(ingredientId);
+        }
     }
 
-    public void deleteIngredient(int ingredientId) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.delete(databaseHelper.TABLE_INGREDIENT, databaseHelper.INGREDIENT_ID + " = ?", new String[]{String.valueOf(ingredientId)});
+    public void deleteIngredient(long ingredientId) {
+        database.delete(databaseHelper.TABLE_INGREDIENT, databaseHelper.INGREDIENT_ID + " = ?", new String[]{String.valueOf(ingredientId)});
     }
 
-    public void deleteRecommendationItem(int recommendationItemId) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.delete(databaseHelper.TABLE_RECOMMENDATION_HISTORY, databaseHelper.RECOMMENDATION_HISTORY_ID + " = ?", new String[]{String.valueOf(recommendationItemId)});
+    public void deleteRecommendationItem(long recommendationItemId) {
+        database.delete(databaseHelper.TABLE_RECOMMENDATION_HISTORY, databaseHelper.RECOMMENDATION_HISTORY_ID + " = ?", new String[]{String.valueOf(recommendationItemId)});
     }
 }

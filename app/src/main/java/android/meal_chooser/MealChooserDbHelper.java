@@ -22,10 +22,10 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
     final String INGREDIENT_IS_AVAILABLE = "is_available";
     final String INGREDIENT_BELONGS_TO_DISH = "belongs_to_dish";
 
-    final String TABLE_INGREDIENT_DISH = "ingredient_dish";
-    final String INGREDIENT_DISH_ID = "id";
-    final String INGREDIENT_DISH_DISH_ID = "dish_id";
-    final String INGREDIENT_DISH_INGREDIENT_ID = "ingredient_id";
+    final String TABLE_DISH_INGREDIENT = "dish_ingredient";
+    final String DISH_INGREDIENT_ID = "id";
+    final String DISH_INGREDIENT_DISH_ID = "dish_id";
+    final String DISH_INGREDIENT_INGREDIENT_ID = "ingredient_id";
 
     final String TABLE_RECOMMENDATION_HISTORY = "recommendation_history";
     final String RECOMMENDATION_HISTORY_ID = "id";
@@ -63,13 +63,13 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         db.execSQL(createIngredientTableQuery);
 
         // Create the "IngredientDish" table
-        String createIngredientDishTableQuery = "CREATE TABLE " + TABLE_INGREDIENT_DISH + "("
-                + INGREDIENT_DISH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + INGREDIENT_DISH_DISH_ID + " INTEGER,"
+        String createIngredientDishTableQuery = "CREATE TABLE " + TABLE_DISH_INGREDIENT + "("
+                + DISH_INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + DISH_INGREDIENT_DISH_ID + " INTEGER,"
                 + RECOMMENDATION_HISTORY_DISH_NAME + " TEXT,"
-                + INGREDIENT_DISH_INGREDIENT_ID + " INTEGER,"
-                + "FOREIGN KEY(" + INGREDIENT_DISH_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + "),"
-                + "FOREIGN KEY(" + INGREDIENT_DISH_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENT + "(" + INGREDIENT_ID + ")"
+                + DISH_INGREDIENT_INGREDIENT_ID + " INTEGER,"
+                + "FOREIGN KEY(" + DISH_INGREDIENT_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + "),"
+                + "FOREIGN KEY(" + DISH_INGREDIENT_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENT + "(" + INGREDIENT_ID + ")"
                 + ")";
         db.execSQL(createIngredientDishTableQuery);
 
@@ -88,7 +88,7 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         // drop the old tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DISH);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENT_DISH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DISH_INGREDIENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECOMMENDATION_HISTORY);
 
         // create a new one
