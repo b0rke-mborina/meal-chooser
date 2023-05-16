@@ -3,6 +3,7 @@ package android.meal_chooser;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.Objects;
@@ -21,6 +22,9 @@ public class DishActivity extends AppCompatActivity {
         // item1.setLayout();
         // LinearLayout item1 = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dish_ingredient_item);
         // mIngredientListView.addView(item1);
+        LayoutInflater inflater = LayoutInflater.from(DishActivity.this); // some context
+        LinearLayout row = (LinearLayout) inflater.inflate(R.layout.dish_ingredient_item, null);
+        mIngredientListView.addView(row);
     }
 
     /**

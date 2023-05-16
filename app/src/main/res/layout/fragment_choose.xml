@@ -5,76 +5,127 @@
     android:layout_height="match_parent"
     tools:context=".ChooseFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:text="@string/heading_choose"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textColor="@color/black" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:text="@string/heading_choose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:text="@string/time_minutes"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
 
-                <EditText
-                    android:id="@+id/input_time"
-                    android:text=""
-                    android:inputType="numberDecimal|numberSigned"
-                    android:layout_width="0dp"
+                    <TextView
+                        android:text="@string/time_minutes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/input_time"
+                        android:text=""
+                        android:inputType="numberDecimal|numberSigned"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:text="@string/ingredients"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/button_change_ingredients"
+                        android:text="@string/change"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:background="@drawable/oval_button" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:text="@string/dishes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/button_change_dishes"
+                        android:text="@string/change"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:background="@drawable/oval_button" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
-                <TextView
-                    android:text="@string/ingredients"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
-
                 <Button
-                    android:id="@+id/button_change_ingredients"
-                    android:text="@string/change"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:id="@+id/button_choose_dish"
+                    android:text="@string/choose_dish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
                     android:textColor="@color/black"
                     android:background="@drawable/oval_button" />
 
@@ -83,69 +134,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
+                android:orientation="vertical"
+                android:gravity="bottom|end"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
-                <TextView
-                    android:text="@string/dishes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
-
-                <Button
-                    android:id="@+id/button_change_dishes"
-                    android:text="@string/change"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                <ImageButton
+                    android:id="@+id/button_history"
+                    android:layout_width="40dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerInside"
                     android:textColor="@color/black"
-                    android:background="@drawable/oval_button" />
+                    android:src="@drawable/icon_history"
+                    android:background="@drawable/icon_button" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-
-            <Button
-                android:id="@+id/button_choose_dish"
-                android:text="@string/choose_dish"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:textColor="@color/black"
-                android:background="@drawable/oval_button" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="bottom|end"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-
-            <ImageButton
-                android:id="@+id/button_history"
-                android:layout_width="44dp"
-                android:layout_height="39dp"
-                android:scaleType="centerInside"
-                android:textColor="@color/black"
-                android:src="@drawable/icon_history"
-                android:background="@drawable/icon_button" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

@@ -3,37 +3,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textColor="@color/black"
+        android:textSize="16sp"
         android:text="@string/heading_ingredient" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-
-        <TextView
-            android:text="@string/amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+        android:weightSum="2">
 
         <TextView
             android:text="@string/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:text="@string/amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="14sp"
             android:textColor="@color/black" />
 
     </LinearLayout>
@@ -42,9 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:weightSum="2">
 
         <EditText
             android:id="@+id/input_name"
