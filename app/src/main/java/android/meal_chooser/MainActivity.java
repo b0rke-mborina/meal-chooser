@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         chooseData.putInt(DEFAULT_TIME, defaultTime);
         chooseData.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
 
-        // TODO: replace this with changeContentFragment(...) call
         ChooseFragment chooseFragment = new ChooseFragment();
         chooseFragment.setArguments(chooseData);
         fragmentTransaction.add(

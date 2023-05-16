@@ -6,11 +6,8 @@ import android.support.v7.widget.PopupMenu;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -109,7 +106,6 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
         sdf.setTimeZone(TimeZone.getTimeZone(name));
-        String date = sdf.format(unixTimestamp);
-        return date;
+        return sdf.format(unixTimestamp);
     }
 }

@@ -154,7 +154,6 @@ public class MealChooserDataSource {
         return recommendationItems;
     }
 
-    // TODO: create method getDish()
     public Dish getDish(long dishId) {
         String selection = databaseHelper.DISH_ID + " = ?";
         String[] selectionArgs = {String.valueOf(dishId)};

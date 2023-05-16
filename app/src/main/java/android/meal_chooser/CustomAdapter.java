@@ -83,6 +83,14 @@ public class CustomAdapter extends BaseAdapter {
             }
         }
 
+        convertView.setOnLongClickListener(v -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onItemLongClick(null, v, position, getItemId(position));
+                return true;
+            }
+            return false;
+        });
+
         String booleanValue;
         if (layout == R.layout.ingredient_list_item) {
             booleanValue = item.get("ingredientIsAvailable");
@@ -101,14 +109,6 @@ public class CustomAdapter extends BaseAdapter {
                 System.out.println(item.get("dishId") + " " + checked);
                 item.put("dishIsConsidered", String.valueOf(checked));
             }
-        });
-
-        convertView.setOnLongClickListener(v -> {
-            if (onItemLongClickListener != null) {
-                onItemLongClickListener.onItemLongClick(null, v, position, getItemId(position));
-                return true;
-            }
-            return false;
         });
 
         return convertView;

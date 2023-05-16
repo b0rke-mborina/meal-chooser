@@ -70,7 +70,7 @@
                     android:textColor="@color/black" />
 
                 <EditText
-                    android:id="@+id/input_time_to_make"
+                    android:id="@+id/input_time"
                     android:text=""
                     android:inputType="numberDecimal|numberSigned"
                     android:layout_width="0dp"

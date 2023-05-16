@@ -6,7 +6,7 @@ public class NavigationItem implements Serializable {
     private int icon;
     private int title;
 
-    NavigationItem(int icon, int title) {
+    public NavigationItem(int icon, int title) {
         this.icon = icon;
         this.title = title;
     }
