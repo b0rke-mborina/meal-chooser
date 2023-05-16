@@ -6,17 +6,20 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".DishActivity">
-    
+
+    <!-- Enables scrolling when content is longer than the screen -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Helper layout for scrolling (ScrollView requires one child) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
+            <!-- Heading of Dish activity -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,6 +29,7 @@
                 android:textColor="@color/black"
                 android:text="@string/heading_dish" />
 
+            <!-- Label and input container for name of dish -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,6 +38,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Dish name label -->
                 <TextView
                     android:text="@string/name"
                     android:layout_width="0dp"
@@ -42,6 +47,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Dish name input -->
                 <EditText
                     android:id="@+id/input_name"
                     android:text=""
@@ -53,6 +59,7 @@
 
             </LinearLayout>
 
+            <!-- Label and input container for time to make of dish -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,6 +68,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Dish time to make label -->
                 <TextView
                     android:text="@string/time_to_make"
                     android:layout_width="0dp"
@@ -69,6 +77,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Dish time to make input -->
                 <EditText
                     android:id="@+id/input_time"
                     android:text=""
@@ -80,6 +89,7 @@
 
             </LinearLayout>
 
+            <!-- Label and input container for is considered of dish -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +98,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Dish is considered label -->
                 <TextView
                     android:text="@string/is_considered"
                     android:layout_width="0dp"
@@ -96,6 +107,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Dish is considered input -->
                 <CheckBox
                     android:id="@+id/input_is_considered"
                     android:text=""
@@ -106,6 +118,7 @@
 
             </LinearLayout>
 
+            <!-- List view container for ingredients of dish -->
             <LinearLayout
                 android:id="@+id/ingredient_list_view"
                 android:layout_width="match_parent"
@@ -115,6 +128,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
 
+            <!-- Container for button for adding new ingredient to list of ingredients of dish -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +137,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Image button for adding new ingredient to list of ingredients of dish -->
                 <ImageButton
                     android:id="@+id/button_add_ingredient"
                     android:layout_width="30dp"
@@ -134,6 +149,7 @@
 
             </LinearLayout>
 
+            <!-- Container for button for saving dish -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -142,6 +158,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Button for saving dish -->
                 <Button
                     android:id="@+id/button_save"
                     android:text="@string/save"

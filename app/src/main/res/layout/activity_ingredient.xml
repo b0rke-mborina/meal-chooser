@@ -7,16 +7,19 @@
     android:orientation="vertical"
     tools:context=".IngredientActivity">
 
+    <!-- Enables scrolling when content is longer than the screen -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Helper layout for scrolling (ScrollView requires one child) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
+            <!-- Heading of Ingredient activity -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,6 +29,7 @@
                 android:textColor="@color/black"
                 android:text="@string/heading_ingredient" />
 
+            <!-- Label and input container for name of ingredient -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,6 +38,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Ingredient name label -->
                 <TextView
                     android:text="@string/name"
                     android:layout_width="0dp"
@@ -42,6 +47,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Ingredient name input -->
                 <EditText
                     android:id="@+id/input_name"
                     android:text=""
@@ -53,6 +59,7 @@
 
             </LinearLayout>
 
+            <!-- Label and input container for amount of ingredient -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,6 +68,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Ingredient amount label -->
                 <TextView
                     android:text="@string/amount"
                     android:layout_width="0dp"
@@ -69,6 +77,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Ingredient amount input -->
                 <EditText
                     android:id="@+id/input_amount"
                     android:text=""
@@ -80,6 +89,7 @@
 
             </LinearLayout>
 
+            <!-- Label and input container for is available of ingredient -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +98,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Ingredient is available label -->
                 <TextView
                     android:text="@string/is_available"
                     android:layout_width="0dp"
@@ -96,6 +107,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
 
+                <!-- Ingredient is available input -->
                 <CheckBox
                     android:id="@+id/input_is_available"
                     android:text=""
@@ -106,6 +118,7 @@
 
             </LinearLayout>
 
+            <!-- Container for button for saving ingredient -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,6 +127,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Button for saving ingredient -->
                 <Button
                     android:id="@+id/button_save"
                     android:text="@string/save"

@@ -14,11 +14,13 @@
         android:layout_height="wrap_content"
         android:textSize="20sp" /> -->
 
+    <!-- Container for list of navigation items -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="3">
 
+        <!-- Ingredients navigation item -->
         <LinearLayout
             android:id="@+id/ingredients_nav_item"
             android:layout_width="0dp"
@@ -28,12 +30,14 @@
             android:weightSum="10">
             <!-- android:background="@color/purple_200" -->
 
+            <!-- Image of ingredients navigation item -->
             <ImageView
                 android:id="@+id/ingredients_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="7" />
 
+            <!-- Text of ingredients navigation item -->
             <TextView
                 android:id="@+id/ingredients_text_view"
                 android:layout_width="match_parent"
@@ -44,6 +48,7 @@
 
         </LinearLayout>
 
+        <!-- Choose navigation item -->
         <LinearLayout
             android:id="@+id/choose_nav_item"
             android:layout_width="0dp"
@@ -53,12 +58,14 @@
             android:weightSum="10">
             <!-- android:background="@color/purple_500" -->
 
+            <!-- Image of choose navigation item -->
             <ImageView
                 android:id="@+id/choose_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="7" />
 
+            <!-- Text of choose navigation item -->
             <TextView
                 android:id="@+id/choose_text_view"
                 android:layout_width="match_parent"
@@ -69,6 +76,7 @@
 
         </LinearLayout>
 
+        <!-- Dishes navigation item -->
         <LinearLayout
             android:id="@+id/dishes_nav_item"
             android:layout_width="0dp"
@@ -78,12 +86,14 @@
             android:weightSum="10">
             <!-- android:background="@color/purple_700" -->
 
+            <!-- Image of dishes navigation item -->
             <ImageView
                 android:id="@+id/dishes_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="7" />
 
+            <!-- Text of dishes navigation item -->
             <TextView
                 android:id="@+id/dishes_text_view"
                 android:layout_width="match_parent"

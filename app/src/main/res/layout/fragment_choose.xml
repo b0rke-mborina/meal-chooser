@@ -5,16 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".ChooseFragment">
 
+    <!-- Enables scrolling when content is longer than the screen -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Helper layout for scrolling (ScrollView requires one child) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
+            <!-- Heading of Choose fragment -->
             <TextView
                 android:text="@string/heading_choose"
                 android:layout_width="match_parent"
@@ -25,11 +28,13 @@
                 android:textSize="20sp"
                 android:textColor="@color/black" />
 
+            <!-- Labels, input and buttons container for time, ingredients and dishes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- Label and input container for time limit -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,6 +43,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
 
+                    <!-- Time limit label -->
                     <TextView
                         android:text="@string/time_minutes"
                         android:layout_width="0dp"
@@ -46,6 +52,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/black" />
 
+                    <!-- Time limit input -->
                     <EditText
                         android:id="@+id/input_time"
                         android:text=""
@@ -57,6 +64,7 @@
 
                 </LinearLayout>
 
+                <!-- Label and button container for ingredients -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,6 +73,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
 
+                    <!-- Ingredients label -->
                     <TextView
                         android:text="@string/ingredients"
                         android:layout_width="0dp"
@@ -73,6 +82,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/black" />
 
+                    <!-- Ingredients button -->
                     <Button
                         android:id="@+id/button_change_ingredients"
                         android:text="@string/change"
@@ -84,6 +94,7 @@
 
                 </LinearLayout>
 
+                <!-- Label and button container for dishes -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -92,6 +103,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
 
+                    <!-- Dishes label -->
                     <TextView
                         android:text="@string/dishes"
                         android:layout_width="0dp"
@@ -100,6 +112,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/black" />
 
+                    <!-- Dishes button -->
                     <Button
                         android:id="@+id/button_change_dishes"
                         android:text="@string/change"
@@ -113,6 +126,7 @@
 
             </LinearLayout>
 
+            <!-- Container for button for choosing a dish for eating -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,6 +135,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Button for choosing a dish for eating -->
                 <Button
                     android:id="@+id/button_choose_dish"
                     android:text="@string/choose_dish"
@@ -131,6 +146,7 @@
 
             </LinearLayout>
 
+            <!-- Container for button for checking recommendation history -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,6 +155,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- Image button for checking recommendation history -->
                 <ImageButton
                     android:id="@+id/button_history"
                     android:layout_width="40dp"

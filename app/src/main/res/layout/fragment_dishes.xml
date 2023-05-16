@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".DishesFragment">
 
+    <!-- Container for main content of fragment -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Heading of Dishes fragment -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,12 +22,14 @@
             android:textColor="@color/black"
             android:text="@string/heading_dishes" />
 
+        <!-- Container for list header items -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="4">
 
+            <!-- Time to make label in list header -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -35,6 +39,7 @@
                 android:textColor="@color/black"
                 android:text="@string/time_to_make" />
 
+            <!-- Empty label above names of dishes in list header -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -44,6 +49,7 @@
                 android:textColor="@color/black"
                 android:text="" />
 
+            <!-- Is considered label in list header -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -66,11 +72,13 @@
 
     </LinearLayout>
 
+    <!-- Container for image button for adding new dish -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom|end">
 
+        <!-- Image button for adding new dish -->
         <ImageButton
             android:id="@+id/button_add"
             android:layout_width="60dp"

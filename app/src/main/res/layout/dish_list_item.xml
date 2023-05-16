@@ -30,12 +30,14 @@
         android:textSize="16sp"
         android:gravity="center_vertical" />
 
+    <!-- Container for checkbox for dish is considered (for centering checkbox) -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1">
 
+        <!-- Checkbox for dish is considered -->
         <CheckBox
             android:id="@+id/item_is_considered"
             android:text=""
