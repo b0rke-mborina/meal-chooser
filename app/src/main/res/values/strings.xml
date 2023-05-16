@@ -14,6 +14,10 @@
     <string name="heading_ingredients">Ingredients</string>
     <string name="heading_choose">What should I eat?</string>
     <string name="heading_dishes">Dishes</string>
+    <string name="heading_ingredient">Ingredient</string>
+
+    <string name="name">Name</string>
+    <string name="save">Save</string>
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -30,4 +34,6 @@
     <string name="is_available">Is available?</string>
     <string name="time_to_make">Time to make</string>
     <string name="considered">Considered?</string>
+    <string name="heading_dish">Dish</string>
+    <string name="is_considered">Is considered?</string>
 </resources>
