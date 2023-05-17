@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
@@ -37,62 +39,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String INGREDIENTS = "ingredients";
 
-    private Ingredient[] ingredients = new Ingredient[]{
-        new Ingredient(11, "Rice", 3, true, false),
-        new Ingredient(12, "Sausage", 1, true, false),
-        new Ingredient(13, "Potato", 2, true, false),
-        new Ingredient(14, "Cheese", 1, false, false),
-        new Ingredient(15, "Apple", 2, true, false),
-        new Ingredient(16, "Bread", 1, false, false),
-        new Ingredient(17, "Strawberry", 3, false, false),
-        new Ingredient(18, "Sour cream", 1, true, false),
-        new Ingredient(19, "Mayonnaise", 1, true, false)
-    };
+    private Ingredient[] ingredients;
 
     /**
      * Key for sharing list of dishes.
      */
     private static final String DISHES = "dishes";
 
-    private Dish[] dishes = new Dish[]{
-        new Dish(101, "Pasta carbonara", 20, true,
-            new Ingredient[]{
-                new Ingredient(21, "Pasta", 1, null, true),
-                new Ingredient(22, "Bacon", 1, null, true)
-            }
-        ),
-        new Dish(102, "Risotto", 35, true,
-            new Ingredient[]{
-                new Ingredient(23, "Rice", 1, null, true),
-                new Ingredient(24, "Salsa", 1,null , true)
-            }
-        ),
-        new Dish(103, "Toast", 8, false,
-            new Ingredient[]{
-                new Ingredient(25, "Bread", 1, null, true),
-                new Ingredient(26, "Cheese", 1, null, true)
-            }
-        ),
-        new Dish(104, "Tortillas", 1, true,
-            new Ingredient[]{
-                new Ingredient(27, "Tortilla", 2, null, true),
-                new Ingredient(28, "Chicken meat", 1, null, true)
-            }
-        ),
-        new Dish(105, "Fruit salad", 5, false,
-            new Ingredient[]{
-                new Ingredient(29, "Apple", 2, null, true),
-                new Ingredient(30, "Strawberry", 3, null, true)
-            }
-        ),
-    };
+    private Dish[] dishes;
 
     /**
      * Key for sharing list of recommendation history items.
      */
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
 
-    RecommendationItem[] recommendationItems = new RecommendationItem[]{
+    private RecommendationItem[] recommendationItems;/* = new RecommendationItem[]{
             new RecommendationItem(1, 8, "Doner kebab", 1683904471),
             new RecommendationItem(2, 1, "Pizza capricciosa", 1683911916),
             new RecommendationItem(3, 10, "Cheeseburger", 1683911671),
@@ -103,12 +64,27 @@ public class MainActivity extends AppCompatActivity {
             new RecommendationItem(8, 9, "Sausages", 1683912001),
             new RecommendationItem(9, 6, "Toast", 1683912010),
             new RecommendationItem(10, 5, "Croissant", 1683912034),
-    };
+    };*/
+
+    MealChooserDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        datasource = new MealChooserDataSource(this);
+        datasource.open();
+
+        generateData();
+
+        // System.out.println(Arrays.toString(datasource.getAllIngredients()));
+        ingredients = datasource.getAllIngredients();
+        // System.out.println(Arrays.toString(ingredients));
+        dishes = datasource.getAllDishes();
+        // System.out.println(Arrays.toString(dishes));
+        recommendationItems = datasource.getAllRecommendationHistoryItems();
+        System.out.println(Arrays.toString(recommendationItems));
 
         // add fragment to placeholder
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -140,6 +116,18 @@ public class MainActivity extends AppCompatActivity {
         );
 
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        datasource.open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        datasource.close();
     }
 
     /**
@@ -226,5 +214,98 @@ public class MainActivity extends AppCompatActivity {
                 R.id.placeholder_fragment_content, fragment, tag
         );
         fragmentTransaction.commit();
+    }
+
+    private void generateData() {
+        datasource.database.delete(MealChooserDbHelper.TABLE_INGREDIENT, null, null);
+        datasource.database.delete(MealChooserDbHelper.TABLE_DISH, null, null);
+        datasource.database.delete(MealChooserDbHelper.TABLE_RECOMMENDATION_HISTORY, null, null);
+
+        // generate ingredients
+        Ingredient[] ingredients = new Ingredient[]{
+                new Ingredient(11, "Rice", 3, true, false),
+                new Ingredient(12, "Sausage", 1, true, false),
+                new Ingredient(13, "Potato", 2, true, false),
+                new Ingredient(14, "Cheese", 1, false, false),
+                new Ingredient(15, "Apple", 2, true, false),
+                new Ingredient(16, "Bread", 1, false, false),
+                new Ingredient(17, "Strawberry", 3, false, false),
+                new Ingredient(18, "Sour cream", 1, true, false),
+                new Ingredient(19, "Mayonnaise", 1, true, false)
+        };
+        Ingredient ingredientLast = new Ingredient();
+        for (Ingredient ingredient : ingredients) {
+            ingredientLast = datasource.createIngredient(ingredient);
+        }
+        /*System.out.println(ingredientLast.getId());
+        System.out.println(ingredientLast.getName());
+        System.out.println(ingredientLast.getAmount());
+        System.out.println(ingredientLast.isAvailable());
+        System.out.println(ingredientLast.belongsToDish());*/
+
+        // generate dishes
+        Dish[] dishes = new Dish[]{
+                new Dish(101, "Pasta carbonara", 20, true,
+                        new Ingredient[]{
+                                new Ingredient(21, "Pasta", 1, null, true),
+                                new Ingredient(22, "Bacon", 1, null, true)
+                        }
+                ),
+                new Dish(102, "Risotto", 35, true,
+                        new Ingredient[]{
+                                new Ingredient(23, "Rice", 1, null, true),
+                                new Ingredient(24, "Salsa", 1,null , true)
+                        }
+                ),
+                new Dish(103, "Toast", 8, false,
+                        new Ingredient[]{
+                                new Ingredient(25, "Bread", 1, null, true),
+                                new Ingredient(26, "Cheese", 1, null, true)
+                        }
+                ),
+                new Dish(104, "Tortillas", 1, true,
+                        new Ingredient[]{
+                                new Ingredient(27, "Tortilla", 2, null, true),
+                                new Ingredient(28, "Chicken meat", 1, null, true)
+                        }
+                ),
+                new Dish(105, "Fruit salad", 5, false,
+                        new Ingredient[]{
+                                new Ingredient(29, "Apple", 2, null, true),
+                                new Ingredient(30, "Strawberry", 3, null, true)
+                        }
+                ),
+        };
+        Dish dishLast = new Dish();
+        for (Dish dish : dishes) {
+            dishLast = datasource.createDish(dish);
+        }
+        /*System.out.println(dishLast.getId());
+        System.out.println(dishLast.getName());
+        System.out.println(dishLast.getTimeToMakeInMinutes());
+        System.out.println(dishLast.isConsidered());
+        System.out.println(Arrays.toString(dishLast.getIngredients()));*/
+
+        // generate recommendation history
+        RecommendationItem[] recommendationItems = new RecommendationItem[]{
+                new RecommendationItem(1, 8, "Doner kebab", 1683904471),
+                new RecommendationItem(2, 1, "Pizza capricciosa", 1683911916),
+                new RecommendationItem(3, 10, "Cheeseburger", 1683911671),
+                new RecommendationItem(4, 3, "Pizza margherita", 1683911959),
+                new RecommendationItem(5, 7, "Mexican food", 1683911969),
+                new RecommendationItem(6, 4, "Pasta carbonara", 1683911979),
+                new RecommendationItem(7, 2, "Hot dog", 1683911992),
+                new RecommendationItem(8, 9, "Sausages", 1683912001),
+                new RecommendationItem(9, 6, "Toast", 1683912010),
+                new RecommendationItem(10, 5, "Croissant", 1683912034),
+        };
+        RecommendationItem recommendationItemLast = new RecommendationItem();
+        for (RecommendationItem recommendationItem : recommendationItems) {
+            recommendationItemLast = datasource.createRecommendationItem(recommendationItem);
+        }
+        System.out.println(recommendationItemLast.getId());
+        System.out.println(recommendationItemLast.getDishId());
+        System.out.println(recommendationItemLast.getDishName());
+        System.out.println(recommendationItemLast.getTimestamp());
     }
 }

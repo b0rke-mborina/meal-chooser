@@ -7,31 +7,31 @@ import android.support.annotation.Nullable;
 
 public class MealChooserDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "meal_chooser_database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
-    final String TABLE_DISH = "dish";
-    final String DISH_ID = "id";
-    final String DISH_NAME = "name";
-    final String DISH_TIME_TO_MAKE_IN_MINUTES = "time_to_make_in_minutes";
-    final String DISH_IS_CONSIDERED = "is_considered";
+    public static final String TABLE_DISH = "dish";
+    public static final String DISH_ID = "id";
+    public static final String DISH_NAME = "name";
+    public static final String DISH_TIME_TO_MAKE_IN_MINUTES = "time_to_make_in_minutes";
+    public static final String DISH_IS_CONSIDERED = "is_considered";
 
-    final String TABLE_INGREDIENT = "ingredient";
-    final String INGREDIENT_ID = "id";
-    final String INGREDIENT_NAME = "name";
-    final String INGREDIENT_AMOUNT = "amount";
-    final String INGREDIENT_IS_AVAILABLE = "is_available";
-    final String INGREDIENT_BELONGS_TO_DISH = "belongs_to_dish";
+    public static final String TABLE_INGREDIENT = "ingredient";
+    public static final String INGREDIENT_ID = "id";
+    public static final String INGREDIENT_NAME = "name";
+    public static final String INGREDIENT_AMOUNT = "amount";
+    public static final String INGREDIENT_IS_AVAILABLE = "is_available";
+    public static final String INGREDIENT_BELONGS_TO_DISH = "belongs_to_dish";
 
-    final String TABLE_DISH_INGREDIENT = "dish_ingredient";
-    final String DISH_INGREDIENT_ID = "id";
-    final String DISH_INGREDIENT_DISH_ID = "dish_id";
-    final String DISH_INGREDIENT_INGREDIENT_ID = "ingredient_id";
+    public static final String TABLE_DISH_INGREDIENT = "dish_ingredient";
+    public static final String DISH_INGREDIENT_ID = "id";
+    public static final String DISH_INGREDIENT_DISH_ID = "dish_id";
+    public static final String DISH_INGREDIENT_INGREDIENT_ID = "ingredient_id";
 
-    final String TABLE_RECOMMENDATION_HISTORY = "recommendation_history";
-    final String RECOMMENDATION_HISTORY_ID = "id";
-    final String RECOMMENDATION_HISTORY_DISH_ID = "dish_id";
-    final String RECOMMENDATION_HISTORY_DISH_NAME = "dish_name";
-    final String RECOMMENDATION_HISTORY_TIMESTAMP = "timestamp";
+    public static final String TABLE_RECOMMENDATION_HISTORY = "recommendation_history";
+    public static final String RECOMMENDATION_HISTORY_ID = "id";
+    public static final String RECOMMENDATION_HISTORY_DISH_ID = "dish_id";
+    public static final String RECOMMENDATION_HISTORY_DISH_NAME = "dish_name";
+    public static final String RECOMMENDATION_HISTORY_TIMESTAMP = "timestamp";
 
     public MealChooserDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -66,7 +66,6 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createIngredientDishTableQuery = "CREATE TABLE " + TABLE_DISH_INGREDIENT + "("
                 + DISH_INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + DISH_INGREDIENT_DISH_ID + " INTEGER,"
-                + RECOMMENDATION_HISTORY_DISH_NAME + " TEXT,"
                 + DISH_INGREDIENT_INGREDIENT_ID + " INTEGER,"
                 + "FOREIGN KEY(" + DISH_INGREDIENT_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + "),"
                 + "FOREIGN KEY(" + DISH_INGREDIENT_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENT + "(" + INGREDIENT_ID + ")"
@@ -77,6 +76,7 @@ public class MealChooserDbHelper extends SQLiteOpenHelper {
         String createRecommendationHistoryTableQuery = "CREATE TABLE " + TABLE_RECOMMENDATION_HISTORY + "("
                 + RECOMMENDATION_HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + RECOMMENDATION_HISTORY_DISH_ID + " INTEGER,"
+                + RECOMMENDATION_HISTORY_DISH_NAME + " TEXT,"
                 + RECOMMENDATION_HISTORY_TIMESTAMP + " INTEGER,"
                 + "FOREIGN KEY(" + RECOMMENDATION_HISTORY_DISH_ID + ") REFERENCES " + TABLE_DISH + "(" + DISH_ID + ")"
                 + ")";
