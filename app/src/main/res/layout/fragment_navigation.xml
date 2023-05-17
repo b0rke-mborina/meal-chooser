@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="65dp"
     android:background="@color/teal_200"
-    android:padding="8dp"
+    android:paddingTop="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     tools:context=".NavigationFragment">
 
     <!-- Container for list of nav items
@@ -35,14 +37,14 @@
                 android:id="@+id/ingredients_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="7" />
+                android:layout_weight="6" />
 
             <!-- Text of ingredients navigation item -->
             <TextView
                 android:id="@+id/ingredients_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
@@ -63,14 +65,14 @@
                 android:id="@+id/choose_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="7" />
+                android:layout_weight="6" />
 
             <!-- Text of choose navigation item -->
             <TextView
                 android:id="@+id/choose_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
@@ -91,14 +93,14 @@
                 android:id="@+id/dishes_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="7" />
+                android:layout_weight="6" />
 
             <!-- Text of dishes navigation item -->
             <TextView
                 android:id="@+id/dishes_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 

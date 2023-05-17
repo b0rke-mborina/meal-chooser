@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,10 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recommendation_history);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        System.out.println("CREATED");
         items = (RecommendationItem[]) getIntent().getSerializableExtra(RECOMMENDATION_HISTORY_ITEMS);
+        System.out.println(Arrays.toString(items));
+
 
         // create data for adapter from fragment argument
         List<HashMap<String, String>> dishListItems = new ArrayList<>();

@@ -1,16 +1,22 @@
 package android.meal_chooser;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,9 +98,47 @@ public class ChooseFragment extends Fragment {
         mButtonChooseDish.setOnClickListener(v -> {
             System.out.println("Choose selected.");
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
-            // Intent intent = new Intent(thisActivity, IngredientActivity.class);
-            // intent.putExtra(RESULT, result);
-            // startActivity(intent);
+
+            // recommend dish
+            Dish dish = new Dish(101, "Pasta carbonara", 20, true,
+                new Ingredient[]{
+                        new Ingredient(21, "Pasta", 1, null, true),
+                        new Ingredient(22, "Bacon", 1, null, true)
+            });
+
+            // create the object of dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+
+            // set dialog title
+            builder.setTitle(dish.getName());
+
+            // set dialog message
+            StringJoiner ingredientJoiner = new StringJoiner(", ");
+            for (Ingredient ingredient : dish.getIngredients()) {
+                ingredientJoiner.add(ingredient.getName());
+            }
+            String ingredientList = ingredientJoiner.toString();
+            builder.setMessage("You should eat this.\n\nIt takes " + dish.getTimeToMakeInMinutes()
+                    + "min to make.\n\nRequired ingredients:\n" + ingredientList);
+
+            // set cancelable true for when the user clicks on the outside the dialog then it will close
+            builder.setCancelable(true);
+
+            // when the user clicks the positive button new item will be added to the database and data will be updated
+            builder.setPositiveButton("Yes, I'll eat this", (dialog, which) -> {
+                RecommendationItem recommendationItem = new RecommendationItem();
+                recommendationItem.setDishId(dish.getId());
+                recommendationItem.setDishName(dish.getName());
+                thisActivity.datasource.createRecommendationItem(recommendationItem);
+                thisActivity.setRecommendationItems(thisActivity.datasource.getAllRecommendationHistoryItems());
+            });
+
+            // If user click on the negative button then dialog box will close
+            builder.setNegativeButton("Not this, thank you", (dialog, which) -> dialog.cancel());
+
+            // create and show the dialog
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
         mIconButtonHistory = view.findViewById(R.id.button_history);
@@ -103,7 +147,7 @@ public class ChooseFragment extends Fragment {
             // start new activity which shows result
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity, RecommendationHistoryActivity.class);
-            intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
+            intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, thisActivity.getRecommendationItems());
             startActivity(intent);
         });
 

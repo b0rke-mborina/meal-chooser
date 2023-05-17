@@ -39,34 +39,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String INGREDIENTS = "ingredients";
 
-    private Ingredient[] ingredients;
+    public Ingredient[] ingredients;
 
     /**
      * Key for sharing list of dishes.
      */
     private static final String DISHES = "dishes";
 
-    private Dish[] dishes;
+    public Dish[] dishes;
 
     /**
      * Key for sharing list of recommendation history items.
      */
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
 
-    private RecommendationItem[] recommendationItems;/* = new RecommendationItem[]{
-            new RecommendationItem(1, 8, "Doner kebab", 1683904471),
-            new RecommendationItem(2, 1, "Pizza capricciosa", 1683911916),
-            new RecommendationItem(3, 10, "Cheeseburger", 1683911671),
-            new RecommendationItem(4, 3, "Pizza margherita", 1683911959),
-            new RecommendationItem(5, 7, "Mexican food", 1683911969),
-            new RecommendationItem(6, 4, "Pasta carbonara", 1683911979),
-            new RecommendationItem(7, 2, "Hot dog", 1683911992),
-            new RecommendationItem(8, 9, "Sausages", 1683912001),
-            new RecommendationItem(9, 6, "Toast", 1683912010),
-            new RecommendationItem(10, 5, "Croissant", 1683912034),
-    };*/
+    public RecommendationItem[] recommendationItems;
 
-    MealChooserDataSource datasource;
+    public MealChooserDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,9 +292,33 @@ public class MainActivity extends AppCompatActivity {
         for (RecommendationItem recommendationItem : recommendationItems) {
             recommendationItemLast = datasource.createRecommendationItem(recommendationItem);
         }
-        System.out.println(recommendationItemLast.getId());
+        /*System.out.println(recommendationItemLast.getId());
         System.out.println(recommendationItemLast.getDishId());
         System.out.println(recommendationItemLast.getDishName());
-        System.out.println(recommendationItemLast.getTimestamp());
+        System.out.println(recommendationItemLast.getTimestamp());*/
+    }
+
+    public void setIngredients(Ingredient[] ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setDishes(Dish[] dishes) {
+        this.dishes = dishes;
+    }
+
+    public void setRecommendationItems(RecommendationItem[] recommendationItems) {
+        this.recommendationItems = recommendationItems;
+    }
+
+    public Ingredient[] getIngredients() {
+        return ingredients;
+    }
+
+    public Dish[] getDishes() {
+        return dishes;
+    }
+
+    public RecommendationItem[] getRecommendationItems() {
+        return recommendationItems;
     }
 }

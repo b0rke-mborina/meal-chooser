@@ -305,7 +305,7 @@ public class MealChooserDataSource {
 
     public RecommendationItem createRecommendationItem(RecommendationItem recommendationItem) {
         ContentValues values = new ContentValues();
-        values.put(MealChooserDbHelper.RECOMMENDATION_HISTORY_DISH_ID, recommendationItem.getId());
+        values.put(MealChooserDbHelper.RECOMMENDATION_HISTORY_DISH_ID, recommendationItem.getDishId());
         values.put(MealChooserDbHelper.RECOMMENDATION_HISTORY_DISH_NAME, recommendationItem.getDishName());
         values.put(MealChooserDbHelper.RECOMMENDATION_HISTORY_TIMESTAMP, new Date().getTime() / 1000L);
         long insertedId = database.insert(MealChooserDbHelper.TABLE_RECOMMENDATION_HISTORY, null, values);
