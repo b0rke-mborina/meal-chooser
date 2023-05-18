@@ -148,7 +148,7 @@ public class ChooseFragment extends Fragment {
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity, RecommendationHistoryActivity.class);
             intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, thisActivity.getRecommendationItems());
-            startActivity(intent);
+            startActivityForResult(intent, 1);
         });
 
 

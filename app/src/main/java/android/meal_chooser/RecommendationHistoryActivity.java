@@ -1,5 +1,11 @@
 package android.meal_chooser;
 
+import static android.app.PendingIntent.getActivity;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -22,6 +28,8 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
 
     private RecommendationItem[] items;
 
+    private List<HashMap<String, String>> listItems;
+
     /**
      * Adapter for list of dishes
      */
@@ -32,30 +40,31 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
      */
     private ListView mListContainer;
 
+    public MealChooserDataSource datasource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation_history);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        System.out.println("CREATED");
-        items = (RecommendationItem[]) getIntent().getSerializableExtra(RECOMMENDATION_HISTORY_ITEMS);
-        System.out.println(Arrays.toString(items));
+        datasource = new MealChooserDataSource(this);
 
+        items = (RecommendationItem[]) getIntent().getSerializableExtra(RECOMMENDATION_HISTORY_ITEMS);
 
         // create data for adapter from fragment argument
-        List<HashMap<String, String>> dishListItems = new ArrayList<>();
+        listItems = new ArrayList<>();
         for (RecommendationItem item : items) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("dishName", item.getDishName());
             hashMap.put("dishDate", unixTimestampToString(item.getTimestamp() * 1000));
-            dishListItems.add(hashMap);
+            listItems.add(hashMap);
         }
 
         // define adapter with custom mapping
         String[] from = {"dishName", "dishDate"};
         int[] to = {R.id.item_name, R.id.item_time};
-        itemsAdapter = new SimpleAdapter(this, dishListItems,
+        itemsAdapter = new SimpleAdapter(this, listItems,
                 R.layout.recommendation_history_list_item, from, to);
 
         mListContainer = findViewById(R.id.list_container);
@@ -67,6 +76,29 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
             // inflate the popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_popup_delete, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.delete) {
+                    System.out.println("CHOSEN: DELETE");
+
+                    datasource.open();
+                    datasource.deleteRecommendationItem(items[position].getId());
+                    items = datasource.getAllRecommendationHistoryItems();
+                    datasource.close();
+
+                    listItems.clear();
+                    for (RecommendationItem listItem : items) {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("dishName", listItem.getDishName());
+                        hashMap.put("dishDate", unixTimestampToString(listItem.getTimestamp() * 1000));
+                        listItems.add(hashMap);
+                    }
+                    itemsAdapter.notifyDataSetChanged();
+                }
+                return false;
+            });
+
             popup.show();
             return true;
         });

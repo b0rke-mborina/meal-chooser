@@ -117,6 +117,12 @@ public class CustomAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void updateDataList(List<HashMap<String, String>> items) {
+        data = items;
+        // triggers the list update
+        notifyDataSetChanged();
+    }
+
     private static class ViewHolder {
         CheckBox checkBox;
     }

@@ -29,6 +29,11 @@ public class DishesFragment extends Fragment {
 
     private Dish[] items;
 
+    /**
+     * Key for sharing ingredient for edit.
+     */
+    private static final String DISH = "dish";
+
     private ImageButton mButtonAdd;
 
     /**
@@ -96,11 +101,8 @@ public class DishesFragment extends Fragment {
             // Update the database item with the new checkbox state
             Dish dish = thisActivity.datasource.getDish(thisActivity.dishes[position].getId());
             dish.setConsidered(isChecked);
+            items[position].setConsidered(isChecked);
             thisActivity.dishes[position].setConsidered(isChecked);
-            /*System.out.println(dish.getId());
-            System.out.println(dish.getName());
-            System.out.println(dish.getTimeToMakeInMinutes());
-            System.out.println(Arrays.toString(dish.getIngredients()));*/
             thisActivity.datasource.updateDish(dish);
         });
         itemsAdapter.setOnItemLongClickListener((parent, v, position, id) -> {
@@ -109,6 +111,37 @@ public class DishesFragment extends Fragment {
             // inflate the popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_popup, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.delete) {
+                    System.out.println("CHOSEN: DELETE");
+                    thisActivity.datasource.deleteDish(thisActivity.dishes[position].getId());
+                    Dish[] dishes = thisActivity.datasource.getAllDishes();
+                    items = dishes;
+                    thisActivity.setDishes(dishes);
+
+                    // create data for adapter from fragment argument
+                    List<HashMap<String, String>> newDishListItems = new ArrayList<>();
+                    for (Dish listItem : items) {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("dishId", String.valueOf(listItem.getId()));
+                        hashMap.put("dishTime", listItem.getTimeToMakeInMinutes() + " min");
+                        hashMap.put("dishName", listItem.getName());
+                        hashMap.put("dishIsConsidered", String.valueOf(listItem.isConsidered()));
+                        newDishListItems.add(hashMap);
+                    }
+
+                    itemsAdapter.updateDataList(newDishListItems);
+                } else if (itemId == R.id.edit) {
+                    System.out.println("CHOSEN: EDIT");
+                    Intent intent = new Intent(thisActivity, DishActivity.class);
+                    intent.putExtra(DISH, items[position]);
+                    startActivity(intent);
+                }
+                return false;
+            });
+
             popup.show();
             return true;
         });

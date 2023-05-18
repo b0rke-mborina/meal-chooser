@@ -1,5 +1,7 @@
 package android.meal_chooser;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
      * Key for sharing list of recommendation history items.
      */
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
+
+    /**
+     * Request code for starting recommendation history activity.
+     */
+    private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
 
     public RecommendationItem[] recommendationItems;
 
@@ -205,9 +212,25 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE == 1) {
+            /*if(resultCode == Activity.RESULT_OK){
+                String result=data.getStringExtra("result");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // Write your code if there's no result
+            }*/
+            setRecommendationItems(datasource.getAllRecommendationHistoryItems());
+        }
+    }
+
     private void generateData() {
         datasource.database.delete(MealChooserDbHelper.TABLE_INGREDIENT, null, null);
         datasource.database.delete(MealChooserDbHelper.TABLE_DISH, null, null);
+        datasource.database.delete(MealChooserDbHelper.TABLE_DISH_INGREDIENT, null, null);
         datasource.database.delete(MealChooserDbHelper.TABLE_RECOMMENDATION_HISTORY, null, null);
 
         // generate ingredients

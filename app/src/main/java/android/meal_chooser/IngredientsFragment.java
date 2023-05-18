@@ -27,6 +27,11 @@ public class IngredientsFragment extends Fragment {
 
     private Ingredient[] items;
 
+    /**
+     * Key for sharing ingredient for edit.
+     */
+    private static final String INGREDIENT = "ingredient";
+
     private ImageButton mButtonAdd;
 
     /**
@@ -92,6 +97,7 @@ public class IngredientsFragment extends Fragment {
                 R.layout.ingredient_list_item, from, to);
         itemsAdapter.setCheckBoxChangeListener((position, isChecked) -> {
             // Update the database item with the new checkbox state
+            items[position].setAvailable(isChecked);
             thisActivity.ingredients[position].setAvailable(isChecked);
             thisActivity.datasource.updateIngredient(thisActivity.ingredients[position]);
         });
@@ -101,6 +107,37 @@ public class IngredientsFragment extends Fragment {
             // inflate the popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_popup, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.delete) {
+                    System.out.println("CHOSEN: DELETE");
+                    thisActivity.datasource.deleteIngredient(thisActivity.ingredients[position].getId());
+                    Ingredient[] ingredients = thisActivity.datasource.getAllIngredients();
+                    items = ingredients;
+                    thisActivity.setIngredients(ingredients);
+
+                    // create data for adapter from fragment argument
+                    List<HashMap<String, String>> newIngredientListItems = new ArrayList<>();
+                    for (Ingredient listItem : items) {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("ingredientId", String.valueOf(listItem.getId()));
+                        hashMap.put("ingredientAmount", String.valueOf(listItem.getAmount()));
+                        hashMap.put("ingredientName", listItem.getName());
+                        hashMap.put("ingredientIsAvailable", String.valueOf(listItem.isAvailable()));
+                        newIngredientListItems.add(hashMap);
+                    }
+
+                    itemsAdapter.updateDataList(newIngredientListItems);
+                } else if (itemId == R.id.edit) {
+                    System.out.println("CHOSEN: EDIT");
+                    Intent intent = new Intent(thisActivity, IngredientActivity.class);
+                    intent.putExtra(INGREDIENT, items[position]);
+                    startActivity(intent);
+                }
+                return false;
+            });
+
             popup.show();
             return true;
         });
