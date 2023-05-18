@@ -71,6 +71,8 @@ public class IngredientsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
+        MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+
         // create data for adapter from fragment argument
         List<HashMap<String, String>> ingredientListItems = new ArrayList<>();
         for (Ingredient item : items) {
@@ -88,9 +90,13 @@ public class IngredientsFragment extends Fragment {
 
         itemsAdapter = new CustomAdapter(getActivity(), ingredientListItems,
                 R.layout.ingredient_list_item, from, to);
+        itemsAdapter.setCheckBoxChangeListener((position, isChecked) -> {
+            // Update the database item with the new checkbox state
+            thisActivity.ingredients[position].setAvailable(isChecked);
+            thisActivity.datasource.updateIngredient(thisActivity.ingredients[position]);
+        });
         itemsAdapter.setOnItemLongClickListener((parent, view1, position, id) -> {
             System.out.println("Holded " + items[position].getId());
-            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             PopupMenu popup = new PopupMenu(thisActivity, view1);
             // inflate the popup using xml file
             popup.getMenuInflater()
@@ -108,7 +114,6 @@ public class IngredientsFragment extends Fragment {
         mButtonAdd.setOnClickListener(v -> {
             System.out.println("Clicked!");
             // start new activity which shows result
-            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity, IngredientActivity.class);
             // intent.putExtra(RESULT, result);
             startActivity(intent);

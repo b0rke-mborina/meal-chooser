@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         dishes = datasource.getAllDishes();
         // System.out.println(Arrays.toString(dishes));
         recommendationItems = datasource.getAllRecommendationHistoryItems();
-        System.out.println(Arrays.toString(recommendationItems));
+        // System.out.println(Arrays.toString(recommendationItems));
 
         // add fragment to placeholder
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // create data for fragment
         Bundle chooseData = new Bundle();
         chooseData.putInt(DEFAULT_TIME, defaultTime);
-        chooseData.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
+        chooseData.putSerializable(RECOMMENDATION_HISTORY_ITEMS, getRecommendationItems());
 
         ChooseFragment chooseFragment = new ChooseFragment();
         chooseFragment.setArguments(chooseData);
@@ -184,14 +184,14 @@ public class MainActivity extends AppCompatActivity {
         Bundle data = new Bundle();
         switch (tag) {
             case "ingredients_fragment":
-                data.putSerializable(INGREDIENTS, ingredients);
+                data.putSerializable(INGREDIENTS, getIngredients());
                 break;
             case "choose_fragment":
                 data.putInt(DEFAULT_TIME, defaultTime);
-                data.putSerializable(RECOMMENDATION_HISTORY_ITEMS, recommendationItems);
+                data.putSerializable(RECOMMENDATION_HISTORY_ITEMS, getRecommendationItems());
                 break;
             case "dishes_fragment":
-                data.putSerializable(DISHES, dishes);
+                data.putSerializable(DISHES, getDishes());
                 break;
         }
 

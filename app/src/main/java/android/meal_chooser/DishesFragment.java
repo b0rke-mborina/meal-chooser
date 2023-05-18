@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +73,8 @@ public class DishesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dishes, container, false);
 
+        MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+
         // create data for adapter from fragment argument
         List<HashMap<String, String>> dishListItems = new ArrayList<>();
         for (Dish item : items) {
@@ -89,9 +92,19 @@ public class DishesFragment extends Fragment {
 
         itemsAdapter = new CustomAdapter(getActivity(), dishListItems,
                 R.layout.dish_list_item, from, to);
+        itemsAdapter.setCheckBoxChangeListener((position, isChecked) -> {
+            // Update the database item with the new checkbox state
+            Dish dish = thisActivity.datasource.getDish(thisActivity.dishes[position].getId());
+            dish.setConsidered(isChecked);
+            thisActivity.dishes[position].setConsidered(isChecked);
+            /*System.out.println(dish.getId());
+            System.out.println(dish.getName());
+            System.out.println(dish.getTimeToMakeInMinutes());
+            System.out.println(Arrays.toString(dish.getIngredients()));*/
+            thisActivity.datasource.updateDish(dish);
+        });
         itemsAdapter.setOnItemLongClickListener((parent, v, position, id) -> {
             System.out.println("Hold");
-            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             PopupMenu popup = new PopupMenu(thisActivity, v);
             // inflate the popup using xml file
             popup.getMenuInflater()
@@ -109,7 +122,6 @@ public class DishesFragment extends Fragment {
         mButtonAdd.setOnClickListener(v -> {
             System.out.println("Clicked!");
             // start new activity which shows result
-            MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity.getApplicationContext(), DishActivity.class);
             // intent.putExtra(RESULT, result);
             startActivity(intent);

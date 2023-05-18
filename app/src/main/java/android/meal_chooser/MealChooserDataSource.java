@@ -79,6 +79,8 @@ public class MealChooserDataSource {
         }
         cursor.close();
 
+        // TODO: getIngredient
+
         return dishes;
     }
 
@@ -164,7 +166,7 @@ public class MealChooserDataSource {
         String selection = MealChooserDbHelper.DISH_ID + " = ?";
         String[] selectionArgs = {String.valueOf(dishId)};
 
-        Cursor cursor = database.query(MealChooserDbHelper.TABLE_INGREDIENT, ingredientColumns,
+        Cursor cursor = database.query(MealChooserDbHelper.TABLE_DISH, dishColumns,
                 selection, selectionArgs, null, null, null);
         // System.out.println("Returned " + cursor.getCount() + " rows");
         Dish dish = new Dish();
@@ -208,6 +210,7 @@ public class MealChooserDataSource {
         int indexIngredient = 0;
         for (long ingredientId : ingredientIds) {
             ingredients[indexIngredient] = getIngredient(ingredientId);
+            indexIngredient++;
         }
         dish.setIngredients(ingredients);
 
@@ -217,7 +220,7 @@ public class MealChooserDataSource {
     public Ingredient getIngredient(long ingredientId) {
         String selection = MealChooserDbHelper.INGREDIENT_ID + " = ?";
         String[] selectionArgs = {String.valueOf(ingredientId)};
-        Cursor cursor = database.query(MealChooserDbHelper.TABLE_INGREDIENT, dishIngredientColumns,
+        Cursor cursor = database.query(MealChooserDbHelper.TABLE_INGREDIENT, ingredientColumns,
                 selection, selectionArgs, null, null, null);
         // System.out.println("Returned " + cursorIngredient.getCount() + " rows");
         Ingredient ingredient = new Ingredient();
