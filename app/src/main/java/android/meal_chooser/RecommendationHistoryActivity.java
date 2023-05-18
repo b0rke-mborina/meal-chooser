@@ -2,6 +2,7 @@ package android.meal_chooser;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -121,6 +122,8 @@ public class RecommendationHistoryActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
 

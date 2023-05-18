@@ -223,7 +223,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_CANCELED) {
                 // Write your code if there's no result
             }*/
+            datasource.open();
             setRecommendationItems(datasource.getAllRecommendationHistoryItems());
+            datasource.close();
         }
     }
 
