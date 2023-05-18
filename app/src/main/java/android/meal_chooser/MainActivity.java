@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -59,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
      * Request code for starting recommendation history activity.
      */
     private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
+
+    /**
+     * Request code for starting ingredient activity.
+     */
+    private static final int INGREDIENT_ACTIVITY_REQUEST_CODE = 2;
+
+    /**
+     * Request code for starting dish activity.
+     */
+    private static final int DISH_ACTIVITY_REQUEST_CODE = 3;
 
     public RecommendationItem[] recommendationItems;
 
@@ -216,16 +229,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE == 1) {
-            /*if(resultCode == Activity.RESULT_OK){
-                String result=data.getStringExtra("result");
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
-            }*/
+        if (requestCode == RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE) {
+            System.out.println("closed history");
             datasource.open();
             setRecommendationItems(datasource.getAllRecommendationHistoryItems());
             datasource.close();
+        } else if (requestCode == INGREDIENT_ACTIVITY_REQUEST_CODE) {
+            System.out.println("closed ingredient");
+            datasource.open();
+            setIngredients(datasource.getAllIngredients());
+            datasource.close();
+
+            // create data for adapter from fragment argument
+            List<HashMap<String, String>> newIngredientListItems = new ArrayList<>();
+            for (Ingredient listItem : ingredients) {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("ingredientId", String.valueOf(listItem.getId()));
+                hashMap.put("ingredientAmount", String.valueOf(listItem.getAmount()));
+                hashMap.put("ingredientName", listItem.getName());
+                hashMap.put("ingredientIsAvailable", String.valueOf(listItem.isAvailable()));
+                newIngredientListItems.add(hashMap);
+            }
+
+            IngredientsFragment currentFragment = ((IngredientsFragment) getSupportFragmentManager().findFragmentByTag("ingredients_fragment"));
+            if (currentFragment != null) {
+                currentFragment.updateList(newIngredientListItems);
+            }
+        } else if (requestCode == DISH_ACTIVITY_REQUEST_CODE) {
+            System.out.println("closed dish");
+
         }
     }
 

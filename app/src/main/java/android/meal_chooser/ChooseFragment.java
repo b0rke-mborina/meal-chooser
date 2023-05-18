@@ -35,6 +35,11 @@ public class ChooseFragment extends Fragment {
      */
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
 
+    /**
+     * Request code for starting recommendation history activity.
+     */
+    private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
+
     private int defaultTime;
     private RecommendationItem[] recommendationItems;
 
@@ -148,9 +153,8 @@ public class ChooseFragment extends Fragment {
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity, RecommendationHistoryActivity.class);
             intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, thisActivity.getRecommendationItems());
-            startActivityForResult(intent, 1);
+            thisActivity.startActivityForResult(intent, RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE);
         });
-
 
         return view;
     }

@@ -32,6 +32,11 @@ public class IngredientsFragment extends Fragment {
      */
     private static final String INGREDIENT = "ingredient";
 
+    /**
+     * Request code for starting ingredient activity.
+     */
+    private static final int INGREDIENT_ACTIVITY_REQUEST_CODE = 2;
+
     private ImageButton mButtonAdd;
 
     /**
@@ -133,7 +138,7 @@ public class IngredientsFragment extends Fragment {
                     System.out.println("CHOSEN: EDIT");
                     Intent intent = new Intent(thisActivity, IngredientActivity.class);
                     intent.putExtra(INGREDIENT, items[position]);
-                    startActivity(intent);
+                    thisActivity.startActivityForResult(intent, INGREDIENT_ACTIVITY_REQUEST_CODE);
                 }
                 return false;
             });
@@ -152,10 +157,14 @@ public class IngredientsFragment extends Fragment {
             System.out.println("Clicked!");
             // start new activity which shows result
             Intent intent = new Intent(thisActivity, IngredientActivity.class);
-            // intent.putExtra(RESULT, result);
-            startActivity(intent);
+            intent.putExtra(INGREDIENT, new Ingredient());
+            thisActivity.startActivityForResult(intent, INGREDIENT_ACTIVITY_REQUEST_CODE);
         });
 
         return view;
+    }
+
+    public void updateList(List<HashMap<String, String>> items) {
+        itemsAdapter.updateDataList(items);
     }
 }

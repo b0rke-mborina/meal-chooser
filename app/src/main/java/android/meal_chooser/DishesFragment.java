@@ -34,6 +34,11 @@ public class DishesFragment extends Fragment {
      */
     private static final String DISH = "dish";
 
+    /**
+     * Request code for starting dish activity.
+     */
+    private static final int DISH_ACTIVITY_REQUEST_CODE = 3;
+
     private ImageButton mButtonAdd;
 
     /**
@@ -155,9 +160,9 @@ public class DishesFragment extends Fragment {
         mButtonAdd.setOnClickListener(v -> {
             System.out.println("Clicked!");
             // start new activity which shows result
-            Intent intent = new Intent(thisActivity.getApplicationContext(), DishActivity.class);
-            // intent.putExtra(RESULT, result);
-            startActivity(intent);
+            Intent intent = new Intent(thisActivity, DishActivity.class);
+            intent.putExtra(DISH, new Dish());
+            thisActivity.startActivityForResult(intent, DISH_ACTIVITY_REQUEST_CODE);
         });
 
         return view;
