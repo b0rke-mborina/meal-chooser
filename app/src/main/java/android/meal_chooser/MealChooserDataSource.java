@@ -4,7 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class MealChooserDataSource {
     MealChooserDbHelper databaseHelper;
@@ -157,7 +162,11 @@ public class MealChooserDataSource {
         }
         cursor.close();
 
-        return recommendationItems;
+        // sort items by timestamp, sort newest first, sort it by converting to list and back
+        List<RecommendationItem> recommendationItemList = Arrays.asList(recommendationItems);
+        recommendationItemList.sort((obj1, obj2) -> Long.compare(obj2.getTimestamp(), obj1.getTimestamp()));
+
+        return recommendationItemList.toArray(new RecommendationItem[0]);
     }
 
     public Dish getDish(long dishId) {

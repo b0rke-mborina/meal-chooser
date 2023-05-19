@@ -48,7 +48,13 @@ public class IngredientActivity extends AppCompatActivity {
             Ingredient changedIngredient = new Ingredient();
             changedIngredient.setId(ingredient.getId());
             changedIngredient.setName(String.valueOf(mInputName.getText()));
-            changedIngredient.setAmount(Integer.parseInt(String.valueOf(mInputAmount.getText())));
+
+            try {
+                changedIngredient.setAmount(Integer.parseInt(String.valueOf(mInputAmount.getText())));
+            } catch (Exception e) {
+                e.printStackTrace();
+                changedIngredient.setAmount(0);
+            }
             changedIngredient.setAvailable(mInputIsAvailable.isChecked());
             changedIngredient.setBelongsToDish(false);
 

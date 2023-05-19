@@ -170,7 +170,14 @@ public class ChooseFragment extends Fragment {
 
         // get all dishes and time limit
         Dish[] dishes = thisActivity.datasource.getAllDishes();
-        double timeLimit = Double.parseDouble(String.valueOf(mInputTime.getText()));
+
+        double timeLimit;
+        try {
+            timeLimit = Double.parseDouble(String.valueOf(mInputTime.getText()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            timeLimit = defaultTime;
+        }
 
         // select only dishes which are to be considered and which can be prepared in time
         Dish[] consideredDishes = new Dish[dishes.length];

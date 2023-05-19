@@ -118,10 +118,15 @@ public class DishActivity extends AppCompatActivity {
             Dish changedDish = new Dish();
             changedDish.setId(dish.getId());
             changedDish.setName(String.valueOf(mInputName.getText()));
-            changedDish.setTimeToMakeInMinutes(Double.parseDouble(String.valueOf(mInputTimeToMake.getText())));
-            changedDish.setConsidered(mInputIsConsidered.isChecked());
 
-            System.out.println("HERE");
+            try {
+                changedDish.setTimeToMakeInMinutes(Double.parseDouble(String.valueOf(mInputTimeToMake.getText())));
+            } catch (Exception e) {
+                e.printStackTrace();
+                changedDish.setTimeToMakeInMinutes(0);
+            }
+
+            changedDish.setConsidered(mInputIsConsidered.isChecked());
 
             int numberOfIngredients = mIngredientListView.getChildCount();
             Ingredient[] ingredientsFromList = new Ingredient[numberOfIngredients];
@@ -133,7 +138,14 @@ public class DishActivity extends AppCompatActivity {
                 Ingredient ingredient = new Ingredient();
                 ingredient.setId(0);
                 ingredient.setName(String.valueOf(inputName.getText()));
-                ingredient.setAmount(Integer.parseInt(String.valueOf(inputAmount.getText())));
+
+                try {
+                    ingredient.setAmount(Integer.parseInt(String.valueOf(inputAmount.getText())));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ingredient.setAmount(0);
+                }
+
                 ingredient.setAvailable(null);
                 ingredient.setBelongsToDish(true);
                 ingredientsFromList[i] = ingredient;
