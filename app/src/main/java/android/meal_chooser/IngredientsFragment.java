@@ -164,7 +164,19 @@ public class IngredientsFragment extends Fragment {
         return view;
     }
 
-    public void updateList(List<HashMap<String, String>> items) {
-        itemsAdapter.updateDataList(items);
+    public void updateList(Ingredient[] ingredients) {
+        // create data for adapter from fragment argument
+        List<HashMap<String, String>> ingredientListItems = new ArrayList<>();
+        for (Ingredient listItem : ingredients) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("ingredientId", String.valueOf(listItem.getId()));
+            hashMap.put("ingredientAmount", String.valueOf(listItem.getAmount()));
+            hashMap.put("ingredientName", listItem.getName());
+            hashMap.put("ingredientIsAvailable", String.valueOf(listItem.isAvailable()));
+            ingredientListItems.add(hashMap);
+        }
+
+        items = ingredients;
+        itemsAdapter.updateDataList(ingredientListItems);
     }
 }

@@ -7,14 +7,37 @@
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp">
 
-    <!-- Item heading (marks the start of the ingredient) -->
-    <TextView
+
+    <!-- Ingredient title and remove button container -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="@string/heading_ingredient" />
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <!-- Item heading (marks the start of the ingredient) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/heading_ingredient" />
+
+        <!-- Ingredient remove button -->
+        <ImageButton
+            android:id="@+id/button_remove_ingredient"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0"
+            android:padding="6dp"
+            android:scaleType="centerInside"
+            android:textColor="@color/black"
+            android:src="@drawable/icon_close"
+            android:background="@drawable/icon_button" />
+
+    </LinearLayout>
 
     <!-- Ingredient labels container -->
     <LinearLayout
@@ -56,7 +79,6 @@
         <EditText
             android:id="@+id/input_name"
             android:text=""
-            android:inputType="numberDecimal|numberSigned"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +88,7 @@
         <EditText
             android:id="@+id/input_amount"
             android:text=""
-            android:inputType="numberDecimal|numberSigned"
+            android:inputType="number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

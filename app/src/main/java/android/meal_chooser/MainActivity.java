@@ -240,24 +240,20 @@ public class MainActivity extends AppCompatActivity {
             setIngredients(datasource.getAllIngredients());
             datasource.close();
 
-            // create data for adapter from fragment argument
-            List<HashMap<String, String>> newIngredientListItems = new ArrayList<>();
-            for (Ingredient listItem : ingredients) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("ingredientId", String.valueOf(listItem.getId()));
-                hashMap.put("ingredientAmount", String.valueOf(listItem.getAmount()));
-                hashMap.put("ingredientName", listItem.getName());
-                hashMap.put("ingredientIsAvailable", String.valueOf(listItem.isAvailable()));
-                newIngredientListItems.add(hashMap);
-            }
-
             IngredientsFragment currentFragment = ((IngredientsFragment) getSupportFragmentManager().findFragmentByTag("ingredients_fragment"));
             if (currentFragment != null) {
-                currentFragment.updateList(newIngredientListItems);
+                currentFragment.updateList(getIngredients());
             }
         } else if (requestCode == DISH_ACTIVITY_REQUEST_CODE) {
             System.out.println("closed dish");
+            datasource.open();
+            setDishes(datasource.getAllDishes());
+            datasource.close();
 
+            DishesFragment currentFragment = ((DishesFragment) getSupportFragmentManager().findFragmentByTag("dishes_fragment"));
+            if (currentFragment != null) {
+                currentFragment.updateList(getDishes());
+            }
         }
     }
 

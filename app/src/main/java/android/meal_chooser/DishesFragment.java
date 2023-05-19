@@ -142,7 +142,7 @@ public class DishesFragment extends Fragment {
                     System.out.println("CHOSEN: EDIT");
                     Intent intent = new Intent(thisActivity, DishActivity.class);
                     intent.putExtra(DISH, items[position]);
-                    startActivity(intent);
+                    thisActivity.startActivityForResult(intent, DISH_ACTIVITY_REQUEST_CODE);
                 }
                 return false;
             });
@@ -166,5 +166,21 @@ public class DishesFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void updateList(Dish[] dishes) {
+        // create data for adapter from fragment argument
+        List<HashMap<String, String>> dishListItems = new ArrayList<>();
+        for (Dish listItem : dishes) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("dishId", String.valueOf(listItem.getId()));
+            hashMap.put("dishTime", listItem.getTimeToMakeInMinutes() + " min");
+            hashMap.put("dishName", listItem.getName());
+            hashMap.put("dishIsConsidered", String.valueOf(listItem.isConsidered()));
+            dishListItems.add(hashMap);
+        }
+
+        items = dishes;
+        itemsAdapter.updateDataList(dishListItems);
     }
 }

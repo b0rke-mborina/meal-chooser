@@ -79,8 +79,6 @@ public class MealChooserDataSource {
         }
         cursor.close();
 
-        // TODO: getIngredient
-
         return dishes;
     }
 
@@ -197,10 +195,10 @@ public class MealChooserDataSource {
         long[] ingredientIds = new long[cursorDishIngredient.getCount()];
 
         int index = 0;
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                int indexId = cursor.getColumnIndex(MealChooserDbHelper.DISH_INGREDIENT_INGREDIENT_ID);
-                ingredientIds[index] = cursor.getLong(indexId);
+        if (cursorDishIngredient.getCount() > 0) {
+            while (cursorDishIngredient.moveToNext()) {
+                int indexIngredientId = cursorDishIngredient.getColumnIndex(MealChooserDbHelper.DISH_INGREDIENT_INGREDIENT_ID);
+                ingredientIds[index] = cursorDishIngredient.getLong(indexIngredientId);
                 index++;
             }
         }
@@ -266,7 +264,7 @@ public class MealChooserDataSource {
 
         long dishId = dish.getId();
         for (Ingredient ingredient : dish.getIngredients()) {
-            createIngredient(ingredient);
+            ingredient = createIngredient(ingredient);
             createDishIngredient(dishId, ingredient.getId());
         }
 
@@ -352,7 +350,8 @@ public class MealChooserDataSource {
         }
 
         for (Ingredient ingredient : dish.getIngredients()) {
-            createIngredient(ingredient);
+            ingredient = createIngredient(ingredient);
+            createDishIngredient(dishId, ingredient.getId());
         }
 
         return dish;
