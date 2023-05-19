@@ -9,13 +9,6 @@
     android:paddingRight="8dp"
     tools:context=".NavigationFragment">
 
-    <!-- Container for list of nav items
-    <ListView
-        android:id="@+id/list_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" /> -->
-
     <!-- Container for list of navigation items -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +23,6 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
-            <!-- android:background="@color/purple_200" -->
 
             <!-- Image of ingredients navigation item -->
             <ImageView
@@ -58,7 +50,6 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
-            <!-- android:background="@color/purple_500" -->
 
             <!-- Image of choose navigation item -->
             <ImageView
@@ -86,7 +77,6 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:weightSum="10">
-            <!-- android:background="@color/purple_700" -->
 
             <!-- Image of dishes navigation item -->
             <ImageView

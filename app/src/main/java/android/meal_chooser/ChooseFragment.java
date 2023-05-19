@@ -1,25 +1,24 @@
 package android.meal_chooser;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 import java.util.StringJoiner;
 
 /**
+ * Main fragment of the app. Shows and implements main functionality of the application. Is shown
+ * when the app starts.
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link ChooseFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -27,9 +26,14 @@ import java.util.StringJoiner;
 public class ChooseFragment extends Fragment {
 
     /**
-     * Key for sharing list of navigation items.
+     * Key for sharing default time value.
      */
     private static final String DEFAULT_TIME = "defaultTime";
+
+    /**
+     * Default time limit value for choosing dish.
+     */
+    private int defaultTime;
 
     /**
      * Key for sharing list of recommendation history items.
@@ -37,30 +41,53 @@ public class ChooseFragment extends Fragment {
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
 
     /**
+     * Items from recommendation history.
+     */
+    private RecommendationItem[] recommendationItems;
+
+    /**
      * Request code for starting recommendation history activity.
      */
     private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
 
-    private int defaultTime;
-    private RecommendationItem[] recommendationItems;
-
+    /**
+     * Time limit input.
+     */
     private EditText mInputTime;
-    private Button mButtonChangeIngredients;
-    private Button mButtonChangeDishes;
-    private Button mButtonChooseDish;
-    private ImageButton mIconButtonHistory;
-
-    public ChooseFragment() {
-        // Required empty public constructor
-    }
 
     /**
-     *
+     * Button for changing ingredients. Changes main content fragment to list of ingredients.
+     */
+    private Button mButtonChangeIngredients;
+
+    /**
+     * Button for changing dishes. Changes main content fragment to list of dishes.
+     */
+    private Button mButtonChangeDishes;
+
+    /**
+     * Button for choosing what to eat. Main function of the app.
+     */
+    private Button mButtonChooseDish;
+
+    /**
+     * Button for showing recommendation history. Starts recommendation history activity.
+     */
+    private ImageButton mIconButtonHistory;
+
+    /**
+     * Required empty public constructor.
+     */
+    public ChooseFragment() {}
+
+    /**
+     * Creates new instance of the fragment with retrieved arguments.
      *
      * @param defaultTime Last selected time limit.
-     * @return Instance of the fragment.
+     * @return A new instance of fragment NavigationFragment.
      */
-    public static ChooseFragment newInstance(int defaultTime, RecommendationItem[] recommendationItems) {
+    public static ChooseFragment newInstance(int defaultTime,
+                                             RecommendationItem[] recommendationItems) {
         ChooseFragment fragment = new ChooseFragment();
         Bundle args = new Bundle();
         args.putInt(DEFAULT_TIME, defaultTime);
@@ -69,46 +96,68 @@ public class ChooseFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Runs when fragment is created. Retrieves and saves arguments.
+     *
+     * @param savedInstanceState Data used before in activity.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             defaultTime = getArguments().getInt(DEFAULT_TIME);
-            recommendationItems = (RecommendationItem[]) getArguments().getSerializable(RECOMMENDATION_HISTORY_ITEMS);
+            recommendationItems = (RecommendationItem[]) getArguments()
+                    .getSerializable(RECOMMENDATION_HISTORY_ITEMS);
         }
     }
 
+    /**
+     * Creates view of the fragment. Adds functionality to view elements.
+     *
+     * @param inflater Object for building layout objects.
+     * @param container Parent of the view which is to be created.
+     * @param savedInstanceState Data used before in activity.
+     * @return Created view of the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_choose, container, false);
 
+        // time input referencing and setting initial value
         mInputTime = view.findViewById(R.id.input_time);
-        System.out.println(defaultTime);
         mInputTime.setText(String.valueOf(defaultTime));
 
+        // change ingredients button referencing and setting listener
         mButtonChangeIngredients = view.findViewById(R.id.button_change_ingredients);
         mButtonChangeIngredients.setOnClickListener(v -> {
+            // change main content fragment to list of ingredients
             IngredientsFragment ingredientsFragment = new IngredientsFragment();
-            ((MainActivity) Objects.requireNonNull(getActivity())).changeContentFragment(ingredientsFragment, "ingredients_fragment");
+            ((MainActivity) Objects.requireNonNull(getActivity()))
+                    .changeContentFragment(ingredientsFragment, "ingredients_fragment");
         });
 
+        // change dishes button referencing and setting listener
         mButtonChangeDishes = view.findViewById(R.id.button_change_dishes);
         mButtonChangeDishes.setOnClickListener(v -> {
+            // change main content fragment to list of dishes
             DishesFragment dishesFragment = new DishesFragment();
-            ((MainActivity) Objects.requireNonNull(getActivity())).changeContentFragment(dishesFragment, "dishes_fragment");
+            ((MainActivity) Objects.requireNonNull(getActivity()))
+                    .changeContentFragment(dishesFragment, "dishes_fragment");
         });
 
+        // choose dish button referencing and setting listener
         mButtonChooseDish = view.findViewById(R.id.button_choose_dish);
         mButtonChooseDish.setOnClickListener(v -> {
-            System.out.println("Choose selected.");
+            // main activity reference for accessing data
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
 
-            // recommend dish
+            // recommend dish (can be empty)
             Dish dish = chooseDish();
 
-            // create the object of dialog and set cancelable true (when the user clicks on the outside the dialog then it will close)
+            // create the object of dialog and set cancelable true
+            // (when the user clicks on the outside the dialog then it will close)
             AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
             builder.setCancelable(true);
 
@@ -120,20 +169,24 @@ public class ChooseFragment extends Fragment {
                     ingredientJoiner.add(ingredient.getName());
                 }
                 String ingredientList = ingredientJoiner.toString();
-                builder.setMessage("You should eat this.\n\nIt takes " + dish.getTimeToMakeInMinutes()
+                builder.setMessage("You should eat this.\n\nIt takes "
+                        + dish.getTimeToMakeInMinutes()
                         + "min to make.\n\nRequired ingredients:\n" + ingredientList);
 
-                // when the user clicks the positive button new item will be added to the database and data will be updated
+                // positive button click behaviour
                 builder.setPositiveButton("Yes, I'll eat this", (dialog, which) -> {
+                    // add new item to the database and update data
                     RecommendationItem recommendationItem = new RecommendationItem();
                     recommendationItem.setDishId(dish.getId());
                     recommendationItem.setDishName(dish.getName());
                     thisActivity.datasource.createRecommendationItem(recommendationItem);
-                    thisActivity.setRecommendationItems(thisActivity.datasource.getAllRecommendationHistoryItems());
+                    thisActivity.setRecommendationItems(thisActivity.datasource
+                            .getAllRecommendationHistoryItems());
                 });
 
-                // If user click on the negative button then dialog box will close
-                builder.setNegativeButton("Not this, thank you", (dialog, which) -> dialog.cancel());
+                // negative button click behaviour (close dialog box)
+                builder.setNegativeButton("Not this, thank you",
+                        (dialog, which) -> dialog.cancel());
             } else {
                 // set dialog texts and buttons to show choosing not successful
                 builder.setTitle("Dish could not be chosen");
@@ -143,7 +196,7 @@ public class ChooseFragment extends Fragment {
                         + "- considered dishes (be less picky)\n"
                         + "- available ingredients (buy ingredients)");
 
-                // if user clicks on the negative button then dialog box will close
+                // negative button click behaviour (close dialog box)
                 builder.setNegativeButton("OK", (dialog, which) -> dialog.cancel());
             }
 
@@ -152,25 +205,30 @@ public class ChooseFragment extends Fragment {
             alertDialog.show();
         });
 
+        // recommendation history button referencing and setting listener
         mIconButtonHistory = view.findViewById(R.id.button_history);
         mIconButtonHistory.setOnClickListener(v -> {
-            System.out.println("History checked.");
-            // start new activity which shows result
+            // start recommendation history activity which shows recommendation history
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
             Intent intent = new Intent(thisActivity, RecommendationHistoryActivity.class);
             intent.putExtra(RECOMMENDATION_HISTORY_ITEMS, thisActivity.getRecommendationItems());
-            thisActivity.startActivityForResult(intent, RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE);
+            thisActivity.startActivityForResult(intent,
+                    RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE);
         });
 
         return view;
     }
 
+    /**
+     * Implements main functionality of the application. Recommends a dish to the user.
+     *
+     * @return Dish which is recommended to the user.
+     */
     public Dish chooseDish() {
         MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
 
         // get all dishes and time limit
         Dish[] dishes = thisActivity.datasource.getAllDishes();
-
         double timeLimit;
         try {
             timeLimit = Double.parseDouble(String.valueOf(mInputTime.getText()));
@@ -213,14 +271,16 @@ public class ChooseFragment extends Fragment {
                 // check if ingredient is available
                 for (int j = 0; j < numberOfAvailableIngredients; j++) {
                     Ingredient ingredient = availableIngredients[j];
-                    if (ingredient.getName().equals(ingredientName) && ingredient.getAmount() >= ingredientAmount) {
+                    if (ingredient.getName().equals(ingredientName)
+                            && ingredient.getAmount() >= ingredientAmount) {
                         dishesAvailable++;
                         break;
                     }
                 }
             }
 
-            // add dish which can be prepared to list (dishes with all ingredients available can be prepared)
+            // add dish which can be prepared to list
+            // (dishes with all ingredients available can be prepared)
             if (dishesAvailable == dish.getIngredients().length) {
                 possibleDishes[numberOfPossibleDishes] = dish;
                 numberOfPossibleDishes++;
@@ -232,9 +292,10 @@ public class ChooseFragment extends Fragment {
         System.out.println(Arrays.toString(possibleDishes));
 
 
+        // dish which will be result
         Dish chosenDish = new Dish();
 
-        // if not empty, then random select
+        // if not empty, then overwrite dish with random selected dish
         if (numberOfPossibleDishes == 1) {
             chosenDish = possibleDishes[0];
         } else if (numberOfPossibleDishes > 1) {
