@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.StringJoiner;
 
 /**
@@ -105,41 +106,46 @@ public class ChooseFragment extends Fragment {
             MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
 
             // recommend dish
-            Dish dish = new Dish(101, "Pasta carbonara", 20, true,
-                new Ingredient[]{
-                        new Ingredient(21, "Pasta", 1, null, true),
-                        new Ingredient(22, "Bacon", 1, null, true)
-            });
+            Dish dish = chooseDish();
 
-            // create the object of dialog
+            // create the object of dialog and set cancelable true (when the user clicks on the outside the dialog then it will close)
             AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
-
-            // set dialog title
-            builder.setTitle(dish.getName());
-
-            // set dialog message
-            StringJoiner ingredientJoiner = new StringJoiner(", ");
-            for (Ingredient ingredient : dish.getIngredients()) {
-                ingredientJoiner.add(ingredient.getName());
-            }
-            String ingredientList = ingredientJoiner.toString();
-            builder.setMessage("You should eat this.\n\nIt takes " + dish.getTimeToMakeInMinutes()
-                    + "min to make.\n\nRequired ingredients:\n" + ingredientList);
-
-            // set cancelable true for when the user clicks on the outside the dialog then it will close
             builder.setCancelable(true);
 
-            // when the user clicks the positive button new item will be added to the database and data will be updated
-            builder.setPositiveButton("Yes, I'll eat this", (dialog, which) -> {
-                RecommendationItem recommendationItem = new RecommendationItem();
-                recommendationItem.setDishId(dish.getId());
-                recommendationItem.setDishName(dish.getName());
-                thisActivity.datasource.createRecommendationItem(recommendationItem);
-                thisActivity.setRecommendationItems(thisActivity.datasource.getAllRecommendationHistoryItems());
-            });
+            if (dish.getId() > 0) {
+                // set dialog texts and buttons based on chosen dish
+                builder.setTitle(dish.getName());
+                StringJoiner ingredientJoiner = new StringJoiner(", ");
+                for (Ingredient ingredient : dish.getIngredients()) {
+                    ingredientJoiner.add(ingredient.getName());
+                }
+                String ingredientList = ingredientJoiner.toString();
+                builder.setMessage("You should eat this.\n\nIt takes " + dish.getTimeToMakeInMinutes()
+                        + "min to make.\n\nRequired ingredients:\n" + ingredientList);
 
-            // If user click on the negative button then dialog box will close
-            builder.setNegativeButton("Not this, thank you", (dialog, which) -> dialog.cancel());
+                // when the user clicks the positive button new item will be added to the database and data will be updated
+                builder.setPositiveButton("Yes, I'll eat this", (dialog, which) -> {
+                    RecommendationItem recommendationItem = new RecommendationItem();
+                    recommendationItem.setDishId(dish.getId());
+                    recommendationItem.setDishName(dish.getName());
+                    thisActivity.datasource.createRecommendationItem(recommendationItem);
+                    thisActivity.setRecommendationItems(thisActivity.datasource.getAllRecommendationHistoryItems());
+                });
+
+                // If user click on the negative button then dialog box will close
+                builder.setNegativeButton("Not this, thank you", (dialog, which) -> dialog.cancel());
+            } else {
+                // set dialog texts and buttons to show choosing not successful
+                builder.setTitle("Dish could not be chosen");
+                builder.setMessage("No dish could be chosen based on this selection.\n\n"
+                        + "Change some of this and try again:\n"
+                        + "- increase time limit (take some more time to make food)\n"
+                        + "- considered dishes (be less picky)\n"
+                        + "- available ingredients (buy ingredients)");
+
+                // if user clicks on the negative button then dialog box will close
+                builder.setNegativeButton("OK", (dialog, which) -> dialog.cancel());
+            }
 
             // create and show the dialog
             AlertDialog alertDialog = builder.create();
@@ -157,5 +163,79 @@ public class ChooseFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public Dish chooseDish() {
+        MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
+
+        // get all dishes and time limit
+        Dish[] dishes = thisActivity.datasource.getAllDishes();
+        double timeLimit = Double.parseDouble(String.valueOf(mInputTime.getText()));
+
+        // select only dishes which are to be considered and which can be prepared in time
+        Dish[] consideredDishes = new Dish[dishes.length];
+        int numberOfConsideredDishes = 0;
+        for (Dish dish : dishes) {
+            if (dish.isConsidered() && dish.getTimeToMakeInMinutes() <= timeLimit) {
+                consideredDishes[numberOfConsideredDishes] = dish;
+                numberOfConsideredDishes++;
+            }
+        }
+
+        // get all available ingredients
+        Ingredient[] availableIngredients = new Ingredient[thisActivity.ingredients.length];
+        int numberOfAvailableIngredients = 0;
+        for (Ingredient ingredient : thisActivity.ingredients) {
+            if (ingredient.isAvailable() && ingredient.getAmount() > 0) {
+                availableIngredients[numberOfAvailableIngredients] = ingredient;
+                numberOfAvailableIngredients++;
+            }
+        }
+
+        // select dishes which can be prepared (ingredients for them are available)
+        Dish[] possibleDishes = new Dish[consideredDishes.length];
+        int numberOfPossibleDishes = 0;
+        for (int i = 0; i < numberOfConsideredDishes; i++) {
+            long consideredDishId = consideredDishes[i].getId();
+            int dishesAvailable = 0;
+            Dish dish = thisActivity.datasource.getDish(consideredDishId);
+            for (Ingredient dishIngredient : dish.getIngredients()) {
+                String ingredientName = dishIngredient.getName();
+                int ingredientAmount = dishIngredient.getAmount();
+
+                // check if ingredient is available
+                for (int j = 0; j < numberOfAvailableIngredients; j++) {
+                    Ingredient ingredient = availableIngredients[j];
+                    if (ingredient.getName().equals(ingredientName) && ingredient.getAmount() >= ingredientAmount) {
+                        dishesAvailable++;
+                        break;
+                    }
+                }
+            }
+
+            // add dish which can be prepared to list (dishes with all ingredients available can be prepared)
+            if (dishesAvailable == dish.getIngredients().length) {
+                possibleDishes[numberOfPossibleDishes] = dish;
+                numberOfPossibleDishes++;
+            }
+        }
+
+        System.out.println(numberOfPossibleDishes);
+        System.out.println("possibleDishes");
+        System.out.println(Arrays.toString(possibleDishes));
+
+
+        Dish chosenDish = new Dish();
+
+        // if not empty, then random select
+        if (numberOfPossibleDishes == 1) {
+            chosenDish = possibleDishes[0];
+        } else if (numberOfPossibleDishes > 1) {
+            Random ran = new Random();
+            int indexOfDish = ran.nextInt(numberOfPossibleDishes);
+            chosenDish = possibleDishes[indexOfDish];
+        }
+
+        return chosenDish;
     }
 }

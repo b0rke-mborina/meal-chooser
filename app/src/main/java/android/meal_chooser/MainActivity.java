@@ -267,13 +267,15 @@ public class MainActivity extends AppCompatActivity {
         Ingredient[] ingredients = new Ingredient[]{
                 new Ingredient(11, "Rice", 3, true, false),
                 new Ingredient(12, "Sausage", 1, true, false),
+                new Ingredient(13, "Pasta", 2, true, false),
+                new Ingredient(14, "Bacon", 1, true, false),
                 new Ingredient(13, "Potato", 2, true, false),
-                new Ingredient(14, "Cheese", 1, false, false),
-                new Ingredient(15, "Apple", 2, true, false),
-                new Ingredient(16, "Bread", 1, false, false),
+                new Ingredient(14, "Cheese", 1, true, false),
+                new Ingredient(15, "Apple", 2, false, false),
+                new Ingredient(16, "Bread", 1, true, false),
                 new Ingredient(17, "Strawberry", 3, false, false),
                 new Ingredient(18, "Sour cream", 1, true, false),
-                new Ingredient(19, "Mayonnaise", 1, true, false)
+                new Ingredient(19, "Mayonnaise", 1, false, false)
         };
         Ingredient ingredientLast = new Ingredient();
         for (Ingredient ingredient : ingredients) {
@@ -299,13 +301,13 @@ public class MainActivity extends AppCompatActivity {
                                 new Ingredient(24, "Salsa", 1,null , true)
                         }
                 ),
-                new Dish(103, "Toast", 8, false,
+                new Dish(103, "Toast", 8, true,
                         new Ingredient[]{
                                 new Ingredient(25, "Bread", 1, null, true),
                                 new Ingredient(26, "Cheese", 1, null, true)
                         }
                 ),
-                new Dish(104, "Tortillas", 1, true,
+                new Dish(104, "Tortillas", 1, false,
                         new Ingredient[]{
                                 new Ingredient(27, "Tortilla", 2, null, true),
                                 new Ingredient(28, "Chicken meat", 1, null, true)

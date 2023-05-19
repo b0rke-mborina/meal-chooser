@@ -46,6 +46,7 @@
                     <!-- Time limit label -->
                     <TextView
                         android:text="@string/time_minutes"
+                        android:inputType="numberDecimal|numberSigned"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
