@@ -1,6 +1,10 @@
-package android.meal_chooser;
+package android.meal_chooser.fragments;
 
 import android.content.Intent;
+import android.meal_chooser.activities.DishActivity;
+import android.meal_chooser.MainActivity;
+import android.meal_chooser.R;
+import android.meal_chooser.models.Dish;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;

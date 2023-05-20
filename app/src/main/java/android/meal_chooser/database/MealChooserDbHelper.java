@@ -1,4 +1,4 @@
-package android.meal_chooser;
+package android.meal_chooser.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,5 +1,8 @@
-package android.meal_chooser;
+package android.meal_chooser.fragments;
 
+import android.meal_chooser.MainActivity;
+import android.meal_chooser.R;
+import android.meal_chooser.models.NavigationItem;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

@@ -1,9 +1,13 @@
-package android.meal_chooser;
+package android.meal_chooser.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.meal_chooser.models.Dish;
+import android.meal_chooser.models.Ingredient;
+import android.meal_chooser.models.RecommendationItem;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +23,7 @@ public class MealChooserDataSource {
     /**
      * Database instance.
      */
-    SQLiteDatabase database;
+    public SQLiteDatabase database;
 
     /**
      * Array of columns of the dish table. It's used for selection.

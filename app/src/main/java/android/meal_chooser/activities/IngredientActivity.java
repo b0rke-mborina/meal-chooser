@@ -1,7 +1,10 @@
-package android.meal_chooser;
+package android.meal_chooser.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.meal_chooser.R;
+import android.meal_chooser.database.MealChooserDataSource;
+import android.meal_chooser.models.Ingredient;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;

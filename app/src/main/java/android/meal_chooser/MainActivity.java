@@ -1,6 +1,16 @@
 package android.meal_chooser;
 
 import android.content.Intent;
+import android.meal_chooser.database.MealChooserDataSource;
+import android.meal_chooser.database.MealChooserDbHelper;
+import android.meal_chooser.fragments.ChooseFragment;
+import android.meal_chooser.fragments.DishesFragment;
+import android.meal_chooser.fragments.IngredientsFragment;
+import android.meal_chooser.fragments.NavigationFragment;
+import android.meal_chooser.models.Dish;
+import android.meal_chooser.models.Ingredient;
+import android.meal_chooser.models.NavigationItem;
+import android.meal_chooser.models.RecommendationItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;

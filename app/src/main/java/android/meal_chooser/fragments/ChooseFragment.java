@@ -1,7 +1,13 @@
-package android.meal_chooser;
+package android.meal_chooser.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.meal_chooser.MainActivity;
+import android.meal_chooser.R;
+import android.meal_chooser.activities.RecommendationHistoryActivity;
+import android.meal_chooser.models.Dish;
+import android.meal_chooser.models.Ingredient;
+import android.meal_chooser.models.RecommendationItem;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

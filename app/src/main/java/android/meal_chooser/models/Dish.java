@@ -1,4 +1,4 @@
-package android.meal_chooser;
+package android.meal_chooser.models;
 
 import java.io.Serializable;
 

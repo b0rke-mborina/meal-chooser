@@ -1,6 +1,7 @@
-package android.meal_chooser;
+package android.meal_chooser.fragments;
 
 import android.content.Context;
+import android.meal_chooser.R;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
