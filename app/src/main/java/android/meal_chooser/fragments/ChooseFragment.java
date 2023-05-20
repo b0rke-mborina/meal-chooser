@@ -245,16 +245,6 @@ public class ChooseFragment extends Fragment {
             timeLimit = defaultTime;
         }
 
-        // select only dishes which are to be considered and which can be prepared in time
-        Dish[] consideredDishes = new Dish[dishes.length];
-        int numberOfConsideredDishes = 0;
-        for (Dish dish : dishes) {
-            if (dish.isConsidered() && dish.getTimeToMakeInMinutes() <= timeLimit) {
-                consideredDishes[numberOfConsideredDishes] = dish;
-                numberOfConsideredDishes++;
-            }
-        }
-
         // get all available ingredients
         Ingredient[] availableIngredients = new Ingredient[thisActivity.ingredients.length];
         int numberOfAvailableIngredients = 0;
@@ -265,51 +255,53 @@ public class ChooseFragment extends Fragment {
             }
         }
 
-        // select dishes which can be prepared (ingredients for them are available)
-        Dish[] possibleDishes = new Dish[consideredDishes.length];
-        int numberOfPossibleDishes = 0;
-        for (int i = 0; i < numberOfConsideredDishes; i++) {
-            long consideredDishId = consideredDishes[i].getId();
-            int dishesAvailable = 0;
-            Dish dish = thisActivity.datasource.getDish(consideredDishId);
-            for (Ingredient dishIngredient : dish.getIngredients()) {
+        Dish[] consideredDishes = new Dish[dishes.length];
+        int numberOfConsideredDishes = 0;
+        for (Dish dish : dishes) {
+            // skip this dish if it's not considered or if it takes too long to prepare
+            if (!dish.isConsidered() || dish.getTimeToMakeInMinutes() > timeLimit) {
+                continue;
+            }
+
+            // check if all ingredients are available
+            long dishId = dish.getId();
+            Dish fullDish = thisActivity.datasource.getDish(dishId);
+            int ingredientsAvailable = 0;
+            for (Ingredient dishIngredient : fullDish.getIngredients()) {
                 String ingredientName = dishIngredient.getName();
                 int ingredientAmount = dishIngredient.getAmount();
 
-                // check if ingredient is available
+                // fin if ingredient is available
                 for (int j = 0; j < numberOfAvailableIngredients; j++) {
                     Ingredient ingredient = availableIngredients[j];
                     if (ingredient.getName().equals(ingredientName)
                             && ingredient.getAmount() >= ingredientAmount) {
-                        dishesAvailable++;
+                        ingredientsAvailable++;
                         break;
                     }
                 }
             }
 
-            // add dish which can be prepared to list
-            // (dishes with all ingredients available can be prepared)
-            if (dishesAvailable == dish.getIngredients().length) {
-                possibleDishes[numberOfPossibleDishes] = dish;
-                numberOfPossibleDishes++;
+            // skip this dish if not all ingredients are available
+            if (ingredientsAvailable < fullDish.getIngredients().length) {
+                continue;
             }
+
+            // if the dish wasn't skipped, add it to array and remember number of dishes in array
+            consideredDishes[numberOfConsideredDishes] = fullDish;
+            numberOfConsideredDishes++;
         }
-
-        System.out.println(numberOfPossibleDishes);
-        System.out.println("possibleDishes");
-        System.out.println(Arrays.toString(possibleDishes));
-
 
         // dish which will be result
         Dish chosenDish = new Dish();
 
         // if not empty, then overwrite dish with random selected dish
-        if (numberOfPossibleDishes == 1) {
-            chosenDish = possibleDishes[0];
-        } else if (numberOfPossibleDishes > 1) {
+        if (numberOfConsideredDishes == 1) {
+            chosenDish = consideredDishes[0];
+        } else if (numberOfConsideredDishes > 1) {
             Random ran = new Random();
-            int indexOfDish = ran.nextInt(numberOfPossibleDishes);
-            chosenDish = possibleDishes[indexOfDish];
+            int indexOfDish = ran.nextInt(numberOfConsideredDishes);
+            chosenDish = consideredDishes[indexOfDish];
         }
 
         return chosenDish;
