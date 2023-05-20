@@ -1,6 +1,5 @@
 package android.meal_chooser;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +9,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
+/**
+ * Main activity of the application. It's a launch activity.
+ */
 public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
@@ -26,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String NAV_ITEMS = "navigationItems";
 
+    /**
+     * Storage of navigation items which are shown in navigation fragment.
+     */
     private final NavigationItem[] navigationItems = new NavigationItem[]{
             new NavigationItem(R.drawable.icon_ingredients, R.string.title_ingredients),
             new NavigationItem(R.drawable.icon_choose, R.string.title_choose),
@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity {
     };
 
     /**
-     * Key for sharing list of navigation items.
+     * Key for sharing default time limit.
      */
     private static final String DEFAULT_TIME = "defaultTime";
 
+    /**
+     * Default time limit value.
+     */
     private int defaultTime = 20;
 
     /**
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String INGREDIENTS = "ingredients";
 
+    /**
+     * Storage of ingredients which are shown in ingredients fragment.
+     */
     public Ingredient[] ingredients;
 
     /**
@@ -51,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String DISHES = "dishes";
 
+    /**
+     * Storage of dishes which are shown in dishes fragment.
+     */
     public Dish[] dishes;
 
     /**
@@ -59,50 +68,63 @@ public class MainActivity extends AppCompatActivity {
     private static final String RECOMMENDATION_HISTORY_ITEMS = "recommendationHistoryItems";
 
     /**
-     * Request code for starting recommendation history activity.
+     * Storage of recommendation history items to be shared with recommendation history activity.
+     */
+    public RecommendationItem[] recommendationItems;
+
+    /**
+     * Request code for handling recommendation history activity.
      */
     private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
 
     /**
-     * Request code for starting ingredient activity.
+     * Request code for handling ingredient activity.
      */
     private static final int INGREDIENT_ACTIVITY_REQUEST_CODE = 2;
 
     /**
-     * Request code for starting dish activity.
+     * Request code for handling dish activity.
      */
     private static final int DISH_ACTIVITY_REQUEST_CODE = 3;
 
-    public RecommendationItem[] recommendationItems;
-
+    /**
+     * Data source object instance of this activity.
+     */
     public MealChooserDataSource datasource;
 
+    /**
+     *
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.
+     *                           <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initialize data source object and open database
         datasource = new MealChooserDataSource(this);
         datasource.open();
 
-        generateData();
+        // generateData();
 
-        // System.out.println(Arrays.toString(datasource.getAllIngredients()));
+        // update storage from database
         ingredients = datasource.getAllIngredients();
-        // System.out.println(Arrays.toString(ingredients));
         dishes = datasource.getAllDishes();
-        // System.out.println(Arrays.toString(dishes));
         recommendationItems = datasource.getAllRecommendationHistoryItems();
-        // System.out.println(Arrays.toString(recommendationItems));
 
-        // add fragment to placeholder
+        // add fragments to placeholders using fragment support manager
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // create data for fragment
+        // create data for navigation fragment
         Bundle navData = new Bundle();
         navData.putSerializable(NAV_ITEMS, navigationItems);
 
+        // add navigation fragment to navigation placeholder
         NavigationFragment navigationFragment = new NavigationFragment();
         navigationFragment.setArguments(navData);
         fragmentTransaction.add(
@@ -111,11 +133,12 @@ public class MainActivity extends AppCompatActivity {
                 "navigation_fragment"
         );
 
-        // create data for fragment
+        // create data for choose fragment
         Bundle chooseData = new Bundle();
         chooseData.putInt(DEFAULT_TIME, defaultTime);
         chooseData.putSerializable(RECOMMENDATION_HISTORY_ITEMS, getRecommendationItems());
 
+        // add choose fragment to main content placeholder
         ChooseFragment chooseFragment = new ChooseFragment();
         chooseFragment.setArguments(chooseData);
         fragmentTransaction.add(
@@ -127,12 +150,18 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * For handling when this activity is in the forefront. Opens the database.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         datasource.open();
     }
 
+    /**
+     * For handling when this activity goes out of the forefront. Closes the database.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -141,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Creates option menu in action bar.
+     * Inflates the menu, which adds items to the action bar if it is present.
      *
      * @param menu The options menu in which you place your items.
      * @return boolean True value.
@@ -148,36 +178,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.actionMenu = menu;
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(android.meal_chooser.R.menu.menu_action, menu);
         return true;
     }
 
     /**
      * Handles visibility of menu in action bar.
+     * Shows or hides menu on action bar (3 dots in top right corner of the screen).
      *
      * @param showMenu Value which defines weather to show or hide the menu.
      */
     public void showOverflowMenu(boolean showMenu){
-        // shows menu on action bar (3 dots in top right corner of the screen)
         if (actionMenu == null) return;
         actionMenu.setGroupVisible(R.id.main_menu_group, showMenu);
     }
 
     /**
      * Handles what happens when menu item is clicked.
+     * Handle action bar item clicks here. The action bar will automatically handle clicks on the
+     * Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
      *
      * @param item The menu item that was selected.
      * @return boolean Weather to allow normal menu processing to proceed.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id) {
-            case R.id.settings: // android.meal_chooser.R.id.settings
+            case R.id.settings:
                 System.out.println("Chosen: 'Settings'");
                 break;
             case R.id.import_data:
@@ -193,14 +221,17 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Chosen: 'Help'");
                 break;
         }
-        if (id == android.meal_chooser.R.id.settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Changes main content fragment using fragment manager with data.
+     *
+     * @param fragment Fragment to be changed to.
+     * @param tag Tag which will be added to the fragment when it is changed to.
+     */
     public void changeContentFragment(Fragment fragment, String tag) {
-        // create data for fragment
+        // create data for fragment based on tag
         Bundle data = new Bundle();
         switch (tag) {
             case "ingredients_fragment":
@@ -225,17 +256,32 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Handles what happens when some other activity is finished and this activity comes to the
+     * forefront.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE) {
-            System.out.println("closed history");
+            // update recommendation items from database when recommendation history activity is
+            // finished
             datasource.open();
             setRecommendationItems(datasource.getAllRecommendationHistoryItems());
             datasource.close();
         } else if (requestCode == INGREDIENT_ACTIVITY_REQUEST_CODE) {
-            System.out.println("closed ingredient");
+            // update ingredients storage and list from database when ingredient activity is
+            // finished
+
             datasource.open();
             setIngredients(datasource.getAllIngredients());
             datasource.close();
@@ -245,7 +291,8 @@ public class MainActivity extends AppCompatActivity {
                 currentFragment.updateList(getIngredients());
             }
         } else if (requestCode == DISH_ACTIVITY_REQUEST_CODE) {
-            System.out.println("closed dish");
+            // update dishes storage and list from database when dish activity is finished
+
             datasource.open();
             setDishes(datasource.getAllDishes());
             datasource.close();
@@ -257,6 +304,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Removes all data from database and adds new data to it.
+     */
     private void generateData() {
         datasource.database.delete(MealChooserDbHelper.TABLE_INGREDIENT, null, null);
         datasource.database.delete(MealChooserDbHelper.TABLE_DISH, null, null);
@@ -281,11 +331,6 @@ public class MainActivity extends AppCompatActivity {
         for (Ingredient ingredient : ingredients) {
             ingredientLast = datasource.createIngredient(ingredient);
         }
-        /*System.out.println(ingredientLast.getId());
-        System.out.println(ingredientLast.getName());
-        System.out.println(ingredientLast.getAmount());
-        System.out.println(ingredientLast.isAvailable());
-        System.out.println(ingredientLast.belongsToDish());*/
 
         // generate dishes
         Dish[] dishes = new Dish[]{
@@ -324,11 +369,6 @@ public class MainActivity extends AppCompatActivity {
         for (Dish dish : dishes) {
             dishLast = datasource.createDish(dish);
         }
-        /*System.out.println(dishLast.getId());
-        System.out.println(dishLast.getName());
-        System.out.println(dishLast.getTimeToMakeInMinutes());
-        System.out.println(dishLast.isConsidered());
-        System.out.println(Arrays.toString(dishLast.getIngredients()));*/
 
         // generate recommendation history
         RecommendationItem[] recommendationItems = new RecommendationItem[]{
@@ -347,32 +387,58 @@ public class MainActivity extends AppCompatActivity {
         for (RecommendationItem recommendationItem : recommendationItems) {
             recommendationItemLast = datasource.createRecommendationItem(recommendationItem);
         }
-        /*System.out.println(recommendationItemLast.getId());
-        System.out.println(recommendationItemLast.getDishId());
-        System.out.println(recommendationItemLast.getDishName());
-        System.out.println(recommendationItemLast.getTimestamp());*/
     }
 
+    /**
+     * Ingredients setter. For changing ingredients from different activities.
+     *
+     * @param ingredients New value of ingredients.
+     */
     public void setIngredients(Ingredient[] ingredients) {
         this.ingredients = ingredients;
     }
 
+    /**
+     * Dishes setter. For changing dishes from different activities.
+     *
+     * @param dishes New value of dishes.
+     */
     public void setDishes(Dish[] dishes) {
         this.dishes = dishes;
     }
 
+    /**
+     * Recommendation items setter. For changing recommendation items from different activities.
+     *
+     * @param recommendationItems New value of recommendation items.
+     */
     public void setRecommendationItems(RecommendationItem[] recommendationItems) {
         this.recommendationItems = recommendationItems;
     }
 
+    /**
+     * Ingredients getter. For retrieving ingredients from different activities.
+     *
+     * @return Value of ingredients.
+     */
     public Ingredient[] getIngredients() {
         return ingredients;
     }
 
+    /**
+     * Dishes getter. For retrieving dishes from different activities.
+     *
+     * @return Value of dishes.
+     */
     public Dish[] getDishes() {
         return dishes;
     }
 
+    /**
+     * Recommendation items getter. For retrieving recommendation items from different activities.
+     *
+     * @return Value of recommendation items.
+     */
     public RecommendationItem[] getRecommendationItems() {
         return recommendationItems;
     }

@@ -51,27 +51,29 @@ public class ChooseFragment extends Fragment {
     private static final int RECOMMENDATION_HISTORY_ACTIVITY_REQUEST_CODE = 1;
 
     /**
-     * Time limit input.
+     * Time limit input reference.
      */
     private EditText mInputTime;
 
     /**
-     * Button for changing ingredients. Changes main content fragment to list of ingredients.
+     * Reference of button for changing ingredients. Changes main content fragment to list of
+     * ingredients.
      */
     private Button mButtonChangeIngredients;
 
     /**
-     * Button for changing dishes. Changes main content fragment to list of dishes.
+     * Reference of button for changing dishes. Changes main content fragment to list of dishes.
      */
     private Button mButtonChangeDishes;
 
     /**
-     * Button for choosing what to eat. Main function of the app.
+     * Reference of button for choosing what to eat. Main function of the app.
      */
     private Button mButtonChooseDish;
 
     /**
-     * Button for showing recommendation history. Starts recommendation history activity.
+     * Reference of button for showing recommendation history. Starts recommendation history
+     * activity.
      */
     private ImageButton mIconButtonHistory;
 
@@ -81,7 +83,7 @@ public class ChooseFragment extends Fragment {
     public ChooseFragment() {}
 
     /**
-     * Creates new instance of the fragment with retrieved arguments.
+     * Creates new instance of the fragment with added arguments.
      *
      * @param defaultTime Last selected time limit.
      * @return A new instance of fragment NavigationFragment.

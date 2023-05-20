@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Fragment of the app which shows list of ingredients and implements functionalities related to
+ * ingredients.
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link IngredientsFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -25,6 +28,9 @@ public class IngredientsFragment extends Fragment {
      */
     private static final String INGREDIENTS = "ingredients";
 
+    /**
+     * Storage for list of ingredients.
+     */
     private Ingredient[] items;
 
     /**
@@ -37,10 +43,13 @@ public class IngredientsFragment extends Fragment {
      */
     private static final int INGREDIENT_ACTIVITY_REQUEST_CODE = 2;
 
+    /**
+     * Reference of button for adding new ingredient.
+     */
     private ImageButton mButtonAdd;
 
     /**
-     * Adapter for list of ingredients
+     * Adapter for list of ingredients.
      */
     private CustomAdapter itemsAdapter;
 
@@ -49,15 +58,16 @@ public class IngredientsFragment extends Fragment {
      */
     private ListView mListContainer;
 
-    public IngredientsFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor.
+     */
+    public IngredientsFragment() {}
 
     /**
-     *
+     * Creates new instance of the fragment with added arguments.
      *
      * @param ingredients Existing ingredient objects.
-     * @return Instance of the fragment.
+     * @return Instance of the ingredients fragment.
      */
     public static IngredientsFragment newInstance(Ingredient[] ingredients) {
         IngredientsFragment fragment = new IngredientsFragment();
@@ -67,6 +77,11 @@ public class IngredientsFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Runs when fragment is created. Retrieves and saves arguments.
+     *
+     * @param savedInstanceState Data used before in activity.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +90,21 @@ public class IngredientsFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates view of the fragment. Adds functionality to view elements.
+     *
+     * @param inflater Object for building layout objects.
+     * @param container Parent of the view which is to be created.
+     * @param savedInstanceState Data used before in activity.
+     * @return Created view of the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
+        // parent activity reference for further use
         MainActivity thisActivity = (MainActivity) Objects.requireNonNull(getActivity());
 
         // create data for adapter from fragment argument
@@ -97,27 +121,33 @@ public class IngredientsFragment extends Fragment {
         // define adapter with custom mapping
         String[] from = {"ingredientAmount", "ingredientName", "ingredientIsAvailable"};
         int[] to = {R.id.item_amount, R.id.item_name, R.id.item_is_available};
-
         itemsAdapter = new CustomAdapter(getActivity(), ingredientListItems,
                 R.layout.ingredient_list_item, from, to);
+
+        // change listener for checkboxes of items in list view
         itemsAdapter.setCheckBoxChangeListener((position, isChecked) -> {
-            // Update the database item with the new checkbox state
+            // update the database and data storage with the new checkbox state
             items[position].setAvailable(isChecked);
             thisActivity.ingredients[position].setAvailable(isChecked);
             thisActivity.datasource.updateIngredient(thisActivity.ingredients[position]);
         });
+
+        // long click listener for items in list view
         itemsAdapter.setOnItemLongClickListener((parent, view1, position, id) -> {
-            System.out.println("Holded " + items[position].getId());
+            // create and inflate the popup using xml file
             PopupMenu popup = new PopupMenu(thisActivity, view1);
-            // inflate the popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_popup, popup.getMenu());
 
+            // click listener for items of the menu
             popup.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
                 if (itemId == R.id.delete) {
-                    System.out.println("CHOSEN: DELETE");
-                    thisActivity.datasource.deleteIngredient(thisActivity.ingredients[position].getId());
+                    // delete dish when delete popup item is clicked
+
+                    // update the database and data storage
+                    thisActivity.datasource
+                            .deleteIngredient(thisActivity.ingredients[position].getId());
                     Ingredient[] ingredients = thisActivity.datasource.getAllIngredients();
                     items = ingredients;
                     thisActivity.setIngredients(ingredients);
@@ -129,13 +159,15 @@ public class IngredientsFragment extends Fragment {
                         hashMap.put("ingredientId", String.valueOf(listItem.getId()));
                         hashMap.put("ingredientAmount", String.valueOf(listItem.getAmount()));
                         hashMap.put("ingredientName", listItem.getName());
-                        hashMap.put("ingredientIsAvailable", String.valueOf(listItem.isAvailable()));
+                        hashMap.put("ingredientIsAvailable",
+                                String.valueOf(listItem.isAvailable()));
                         newIngredientListItems.add(hashMap);
                     }
 
+                    // update fragment list view
                     itemsAdapter.updateDataList(newIngredientListItems);
                 } else if (itemId == R.id.edit) {
-                    System.out.println("CHOSEN: EDIT");
+                    // start new activity for editing ingredient when edit popup item is clicked
                     Intent intent = new Intent(thisActivity, IngredientActivity.class);
                     intent.putExtra(INGREDIENT, items[position]);
                     thisActivity.startActivityForResult(intent, INGREDIENT_ACTIVITY_REQUEST_CODE);
@@ -147,15 +179,14 @@ public class IngredientsFragment extends Fragment {
             return true;
         });
 
-        // referencing, setting adapter and adding listeners to items of list container
+        // reference list view and set adapter to list container
         mListContainer = view.findViewById(R.id.list_container);
         mListContainer.setAdapter(itemsAdapter);
 
-        // button for adding add new ingredient
+        // button for adding new ingredient
         mButtonAdd = view.findViewById(R.id.button_add);
         mButtonAdd.setOnClickListener(v -> {
-            System.out.println("Clicked!");
-            // start new activity which shows result
+            // start new activity for adding new ingredient
             Intent intent = new Intent(thisActivity, IngredientActivity.class);
             intent.putExtra(INGREDIENT, new Ingredient());
             thisActivity.startActivityForResult(intent, INGREDIENT_ACTIVITY_REQUEST_CODE);
@@ -164,6 +195,11 @@ public class IngredientsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Updates list in the fragment view. Used for updating the list view from different classes.
+     *
+     * @param ingredients New updated data which the list view is to be updated with.
+     */
     public void updateList(Ingredient[] ingredients) {
         // create data for adapter from fragment argument
         List<HashMap<String, String>> ingredientListItems = new ArrayList<>();
@@ -176,6 +212,7 @@ public class IngredientsFragment extends Fragment {
             ingredientListItems.add(hashMap);
         }
 
+        // update data storage and list view
         items = ingredients;
         itemsAdapter.updateDataList(ingredientListItems);
     }
