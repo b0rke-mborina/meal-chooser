@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Menu reference field.
      */
-    Menu actionMenu;
+    // Menu actionMenu;
 
     /**
      * Key for sharing list of navigation items.
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Default time limit value.
      */
-    private int defaultTime = 20;
+    private final int defaultTime = 20;
 
     /**
      * Key for sharing list of ingredients.
@@ -185,12 +185,12 @@ public class MainActivity extends AppCompatActivity {
      * @param menu The options menu in which you place your items.
      * @return boolean True value.
      */
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.actionMenu = menu;
         getMenuInflater().inflate(android.meal_chooser.R.menu.menu_action, menu);
         return true;
-    }
+    }*/
 
     /**
      * Handles visibility of menu in action bar.
@@ -198,10 +198,10 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param showMenu Value which defines weather to show or hide the menu.
      */
-    public void showOverflowMenu(boolean showMenu){
+    /*public void showOverflowMenu(boolean showMenu){
         if (actionMenu == null) return;
         actionMenu.setGroupVisible(R.id.main_menu_group, showMenu);
-    }
+    }*/
 
     /**
      * Handles what happens when menu item is clicked.
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item The menu item that was selected.
      * @return boolean Weather to allow normal menu processing to proceed.
      */
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     /**
      * Changes main content fragment using fragment manager with data.
